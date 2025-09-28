@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-// @ts-check
-import { defineConfig } from 'astro/config';
-
-// https://astro.build/config
-export default defineConfig({});
-=======
 /* eslint-disable turbo/no-undeclared-env-vars */
 import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
@@ -44,4 +37,4 @@ export default defineConfig({
     }),
   ],
 });
->>>>>>> temp
+
