@@ -42,44 +42,162 @@ import HeaderLink from './HeaderLink.astro';
 		</div>
 	</nav>
 </header>
+
 <style>
+	:root {
+		--header-bg: #0A0819; /* Fundo mais escuro para o header */
+		--header-border: rgba(110, 62, 187, 0.3);
+	}
+
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: var(--background);
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
+		background: var(--header-bg);
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+		border-bottom: 1px solid var(--header-border);
+		backdrop-filter: blur(8px);
+		position: sticky;
+		top: 0;
+		z-index: 100;
 	}
 
-	h2 a,
-	h2 a.active {
+	h2 {
+		margin: 0;
+		font-size: 1.2em;
+	}
+
+	h2 a {
+		text-decoration: none;
+		color: var(--accent);
+		font-weight: 700;
+		transition: color 0.3s ease;
+		padding: 1em 0;
+		display: block;
+	}
+
+	h2 a:hover {
+		color: var(--accent-dark);
 		text-decoration: none;
 	}
+
 	nav {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0.5em 0;
 	}
+
 	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
+		padding: 1em 0.75em;
+		color: rgba(var(--gray-light), 0.9);
+		border-bottom: 3px solid transparent;
 		text-decoration: none;
+		transition: all 0.3s ease;
+		font-weight: 500;
 	}
-	nav a.active {
+
+	nav a:hover {
+		color: var(--accent);
 		text-decoration: none;
 		border-bottom-color: var(--accent);
 	}
-	.social-links,
+
+	nav a.active {
+		color: var(--accent);
+		border-bottom-color: var(--accent);
+		text-decoration: none;
+	}
+
+	.internal-links {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+	}
+
+	.social-links {
+		display: flex;
+		gap: 0.5em;
+		align-items: center;
+	}
+
 	.social-links a {
 		display: flex;
+		padding: 0.5em;
+		border-radius: 6px;
+		transition: all 0.3s ease;
+		color: rgba(var(--gray-light), 0.8);
 	}
+
+	.social-links a:hover {
+		color: var(--accent);
+		background: rgba(110, 62, 187, 0.1);
+		transform: translateY(-2px);
+		text-decoration: none;
+		border-bottom: none;
+	}
+
+	.social-links svg {
+		width: 24px;
+		height: 24px;
+	}
+
+	/* Mobile responsiveness */
 	@media (max-width: 720px) {
+		header {
+			padding: 0 0.5em;
+		}
+
+		nav {
+			padding: 0.25em 0;
+		}
+
+		h2 {
+			font-size: 1.1em;
+		}
+
+		h2 a {
+			padding: 0.75em 0;
+		}
+
+		nav a {
+			padding: 0.75em 0.5em;
+			font-size: 0.9em;
+		}
+
+		.internal-links {
+			gap: 0.25em;
+		}
+
 		.social-links {
 			display: none;
 		}
+	}
+
+	/* Para telas muito pequenas */
+	@media (max-width: 480px) {
+		h2 {
+			font-size: 1em;
+		}
+
+		nav a {
+			padding: 0.5em 0.25em;
+			font-size: 0.85em;
+		}
+	}
+
+	.sr-only {
+		border: 0;
+		padding: 0;
+		margin: 0;
+		position: absolute !important;
+		height: 1px;
+		width: 1px;
+		overflow: hidden;
+		clip: rect(1px 1px 1px 1px);
+		clip: rect(1px, 1px, 1px, 1px);
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 </style>
