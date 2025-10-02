@@ -182,9 +182,9 @@
   },
   "active": "9891c7b366f228ad",
   "lastOpenFiles": [
+    "src/components/Header.astro~",
     "src/styles/global.css~",
     "src/components/FormattedDate.astro~",
-    "src/components/Header.astro~",
     "src/pages/blog/index.astro~",
     "src/components/Footer.astro~",
     "src/consts.ts~",
