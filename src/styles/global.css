@@ -4,7 +4,6 @@
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
 
-
 :root {
   --accent: #d1c7f0;
   --accent-dark: #6e3ebb;
@@ -33,25 +32,28 @@
 	font-style: normal;
 	font-display: swap;
 }
+
 body {
 	font-family: "Atkinson", sans-serif;
 	margin: 0;
 	padding: 0;
 	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
+	background: var(--background);
 	word-wrap: break-word;
 	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
+	color: rgba(var(--gray-light), 0.9);
 	font-size: 20px;
 	line-height: 1.7;
 }
+
 main {
 	width: 720px;
 	max-width: calc(100% - 2em);
 	margin: auto;
 	padding: 3em 1em;
+	background: var(--background);
 }
+
 h1,
 h2,
 h3,
@@ -59,77 +61,171 @@ h4,
 h5,
 h6 {
 	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
+	color: var(--accent);
 	line-height: 1.2;
 }
+
 h1 {
 	font-size: 3.052em;
+	color: #d1c7f0;
 }
+
 h2 {
 	font-size: 2.441em;
+	color: #b8a9e8;
 }
+
 h3 {
 	font-size: 1.953em;
+	color: #9f8be0;
 }
+
 h4 {
 	font-size: 1.563em;
+	color: #866dd8;
 }
+
 h5 {
 	font-size: 1.25em;
+	color: #6e3ebb;
 }
+
 strong,
 b {
 	font-weight: 700;
+	color: var(--accent);
 }
+
 a {
 	color: var(--accent);
+	text-decoration: none;
+	transition: color 0.3s ease;
 }
+
 a:hover {
-	color: var(--accent);
+	color: var(--accent-dark);
+	text-decoration: underline;
 }
+
 p {
 	margin-bottom: 1em;
+	color: rgba(var(--gray-light), 0.8);
 }
+
 .prose p {
 	margin-bottom: 2em;
 }
+
 textarea {
 	width: 100%;
 	font-size: 16px;
+	background: rgba(15, 12, 35, 0.8);
+	border: 1px solid var(--accent-dark);
+	color: rgba(var(--gray-light), 0.9);
+	border-radius: 4px;
+	padding: 0.5em;
 }
+
 input {
 	font-size: 16px;
+	background: rgba(15, 12, 35, 0.8);
+	border: 1px solid var(--accent-dark);
+	color: rgba(var(--gray-light), 0.9);
+	border-radius: 4px;
+	padding: 0.5em;
 }
+
 table {
 	width: 100%;
+	border-collapse: collapse;
 }
+
+th, td {
+	padding: 0.75em;
+	text-align: left;
+	border-bottom: 1px solid rgba(110, 62, 187, 0.3);
+	color: rgba(var(--gray-light), 0.8);
+}
+
+th {
+	color: var(--accent);
+	background: rgba(110, 62, 187, 0.1);
+}
+
 img {
 	max-width: 100%;
 	height: auto;
 	border-radius: 8px;
 }
+
 code {
 	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
+	background-color: rgba(110, 62, 187, 0.2);
+	color: var(--accent);
+	border-radius: 4px;
+	font-family: monospace;
 }
+
 pre {
 	padding: 1.5em;
 	border-radius: 8px;
+	background-color: rgba(15, 12, 35, 0.9);
+	border: 1px solid rgba(110, 62, 187, 0.3);
+	overflow-x: auto;
 }
+
 pre > code {
 	all: unset;
+	background: transparent;
+	color: var(--accent);
 }
+
 blockquote {
 	border-left: 4px solid var(--accent);
 	padding: 0 0 0 20px;
 	margin: 0px;
 	font-size: 1.333em;
+	color: rgba(var(--gray-light), 0.8);
+	background: rgba(110, 62, 187, 0.1);
+	padding: 1em;
+	border-radius: 0 8px 8px 0;
 }
+
 hr {
   border: none;
-  border-top: 1px solid rgb(var(--gray-light));
+  border-top: 1px solid rgba(110, 62, 187, 0.3);
+  margin: 2em 0;
 }
+
+/* Additional dark theme elements */
+::selection {
+  background: rgba(110, 62, 187, 0.3);
+  color: var(--accent);
+}
+
+::-moz-selection {
+  background: rgba(110, 62, 187, 0.3);
+  color: var(--accent);
+}
+
+/* Scrollbar styling for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-dark);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
 @media (max-width: 720px) {
 	body {
 		font-size: 18px;
