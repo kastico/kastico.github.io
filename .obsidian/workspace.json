@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "src/content/blog/Opening the vault.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "Opening the vault"
             }
           }
         ]
@@ -166,7 +166,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 230.5
+    "width": 200,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -180,9 +181,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "f91150878a8f1562",
+  "active": "4383b39f5c083217",
   "lastOpenFiles": [
-    "src/pages/indeex.astro",
-    "src/content/blog/first-post.md"
+    "src/content/blog/third-post.md",
+    "src/content/blog/second-post.md",
+    "src/content/blog/markdown-style-guide.md",
+    "src/content/blog/Opening the vault.md",
+    "README.md",
+    "src/pages/indeex.astro"
   ]
 }
