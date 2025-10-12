@@ -1,6 +1,5 @@
 ---
-title: "About"
-layout: "../layouts/BaseLayout.astro"
+title: About
 ---
 
 # 👋 Hey, I’m António — Welcome to **The Bunker**
