@@ -1,8 +1,8 @@
 ---
 import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 import Layout from '../layouts/BlogPost.astro';
-import { getEntryBySlug } from "astro:content";
-const { data, body } = await getEntryBySlug("pages", "about");
+import { getEntry } from "astro:content";
+const { data, body } = await getEntry("pages", "about");
 ---
 
 <Layout
