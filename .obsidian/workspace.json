@@ -180,26 +180,26 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "4383b39f5c083217",
+  "active": "cbddd6a54f26b328",
   "lastOpenFiles": [
+    "vaults/Untitled.md",
+    "src/layouts/AboutLayout.astro",
+    "src/content/pages/about.md",
+    "src/content/pages",
+    "Vaults.md",
+    "tsconfig.json",
+    "src/pages/indeex.astro",
+    "package-lock.json",
+    "astro.config.mjs",
     "src/content/blog/opening-the-vault.md",
     "src/content/blog/second-post.md",
     "src/content/blog/third-post.md",
     "src/content/blog/markdown-style-guide.md",
-    "src/content/pages/about.md",
-    "Vaults.md",
-    "src/layouts/AboutLayout.astro",
     "src/layouts/BlogPost.astro copy",
     "src/pages/about.md",
     "src/content/vaults",
     "src/content/untitled folder",
-    "src/content/pages",
     "src/pages/vaults",
-    "src/pages/untitled folder",
-    "README.md",
-    "vaults/Untitled.md",
-    "vaults/misc",
-    "vaults/music",
-    "vaults/design"
+    "README.md"
   ]
 }
