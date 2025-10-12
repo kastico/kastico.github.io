@@ -1,5 +1,4 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -8,7 +7,6 @@ const { title, description, body } = Astro.props;
 
 <html lang="pt">
   <head>
-    <BaseHead title={title} description={description} />
     <style>
       main {
         width: calc(100% - 2em);
