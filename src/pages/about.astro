@@ -4,8 +4,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
-// Importa diretamente o Markdown
-import about from '../content/pages/about.md';
+// Importa o markdown como componente Astro
+import AboutContent from '../content/pages/about.md';
 ---
 
 <!DOCTYPE html>
@@ -22,9 +22,8 @@ import about from '../content/pages/about.md';
         font-size: 2rem;
         margin-bottom: 1rem;
       }
-      article p {
-        line-height: 1.6;
-        margin-bottom: 1rem;
+      article {
+        line-height: 1.7;
       }
     </style>
   </head>
@@ -32,10 +31,10 @@ import about from '../content/pages/about.md';
     <Header />
     <main>
       <article>
-        <h1>{about.frontmatter.title}</h1>
-        <div innerHTML={about.default} />
+        <AboutContent />
       </article>
     </main>
     <Footer />
   </body>
 </html>
+
