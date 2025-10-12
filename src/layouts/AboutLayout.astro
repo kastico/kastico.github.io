@@ -41,7 +41,7 @@ const { title, description, body } = Astro.props;
             <h1>{title}</h1>
             <hr />
           </div>
-          <div innerHTML={body}></div>
+          <div set:html={body}></div>
         </div>
       </article>
     </main>
