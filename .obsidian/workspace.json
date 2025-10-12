@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Vaults.md",
+                "file": "src/content/pages/about.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Vaults"
+              "title": "about"
             }
           }
         ]
@@ -182,12 +182,14 @@
   },
   "active": "4383b39f5c083217",
   "lastOpenFiles": [
+    "Vaults.md",
+    "src/layouts/AboutLayout.astro",
+    "src/layouts/BlogPost.astro copy",
     "src/pages/about.md",
     "src/content/pages/about.md",
     "src/content/vaults",
     "src/content/untitled folder",
     "src/content/pages",
-    "Vaults.md",
     "src/pages/vaults",
     "src/pages/untitled folder",
     "README.md",
@@ -195,8 +197,6 @@
     "vaults/misc",
     "vaults/music",
     "vaults/design",
-    "vaults/dev",
-    "vaults",
     "src/content/blog/opening-the-vault.md",
     "src/content/blog/third-post.md",
     "src/content/blog/second-post.md",

@@ -1,16 +1,13 @@
 ---
-import Layout from '../layouts/BlogPost.astro';
+import AboutLayout from '../layouts/AboutLayout.astro';
 import { getEntry } from 'astro:content';
 
 const about = await getEntry('pages', 'about');
-const data = about.data;
-const body = about.body;
 ---
 
-<Layout
-  title={data.title ?? 'About'}
-  description={data.description ?? ''}
->
-  <div innerHTML={body}></div>
-</Layout>
+<AboutLayout
+  title={about.data.title}
+  description={about.data.description}
+  body={about.body}
+/>
 

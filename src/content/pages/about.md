@@ -1,5 +1,6 @@
 ---
 title: About
+description: '"Uma página estática sobre mim"'
 ---
 
 # 👋 Hey, I’m António — Welcome to **The Bunker**
