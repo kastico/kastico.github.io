@@ -1,16 +1,16 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
 import Layout from '../layouts/BlogPost.astro';
-import { getEntry } from "astro:content";
-const { data, body } = await getEntry("pages", "about");
+import { getEntry } from 'astro:content';
+
+const about = await getEntry('pages', 'about');
+const data = about.data;
+const body = about.body;
 ---
 
 <Layout
-	title={data.title}
-	description={data.description}
-	pubDate={data.pubDate}
-	heroImage={data.heroImage}
+  title={data.title ?? 'About'}
+  description={data.description ?? ''}
 >
-	<Fragment set:html={body} />
+  <div innerHTML={body}></div>
 </Layout>
 
