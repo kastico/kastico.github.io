@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "src/content/pages/about.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "about"
+              "title": "README"
             }
           }
         ]
@@ -182,26 +182,25 @@
   },
   "active": "4383b39f5c083217",
   "lastOpenFiles": [
-    "src/content/blog/test.md",
-    "src/content/pages/about.md",
-    "src/content/pages/about.md",
-    "src/content/blog/third-post.md",
-    "src/content/blog/second-post.md",
-    "src/content/blog/opening-the-vault.md",
-    "src/content/blog/markdown-style-guide.md",
     "vaults/Untitled.md",
-    "src/layouts/AboutLayout.astro",
-    "src/content/pages",
+    "README.md",
     "Vaults.md",
-    "tsconfig.json",
+    "src/content/blog/second-post.md",
+    "src/content/pages/about.md",
     "src/pages/indeex.astro",
+    "src/content/blog/third-post.md",
+    "src/content/blog/markdown-style-guide.md",
+    "src/content/blog/opening-the-vault.md",
+    "tsconfig.json",
     "package-lock.json",
     "astro.config.mjs",
+    "src/content/blog/test.md",
+    "src/layouts/AboutLayout.astro",
+    "src/content/pages",
     "src/layouts/BlogPost.astro copy",
     "src/pages/about.md",
     "src/content/vaults",
     "src/content/untitled folder",
-    "src/pages/vaults",
-    "README.md"
+    "src/pages/vaults"
   ]
 }
