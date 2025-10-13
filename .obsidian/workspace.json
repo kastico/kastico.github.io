@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "src/content/pages/about.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "about"
             }
           }
         ]
@@ -180,8 +180,9 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "cbddd6a54f26b328",
+  "active": "4383b39f5c083217",
   "lastOpenFiles": [
+    "README.md",
     "src/pages/blog/[...slug].astro",
     "src/pages/blog/index.astro",
     "src/pages/rss.xml.js",
@@ -198,14 +199,12 @@
     "src/assets",
     "src/layouts/BlogPost.astro",
     "src/layouts/AboutLayout.astro",
-    "src/layouts",
     "src/content/blog/third-post.md",
     "src/content/blog/second-post.md",
     "src/content/blog/opening-the-vault.md",
     "src/content/blog/markdown-style-guide.md",
     "src/content/pages/about.md",
     "vaults/Untitled.md",
-    "README.md",
     "Vaults.md",
     "src/content/blog/test.md",
     "src/pages/about.md"
