@@ -1,0 +1,333 @@
+---
+import BaseHead from '../../../components/BaseHead.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import Tag from '../../../components/tag.astro';
+import { Image } from 'astro:assets';
+
+export async function getStaticPaths() {
+  const vaults = await getCollection('vaults');
+  return vaults.map((vault) => ({
+    params: { vault: vault.id.replace(/\.(md|mdx)$/, '') },
+    props: { vault },
+  }));
+}
+
+const { vault } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage } = vault.data;
+
+// Busca projetos relacionados com este vault
+const allProjects = await getCollection('projects');
+const vaultProjects = allProjects.filter(project => 
+  project.data.vault === vault.id.replace(/\.(md|mdx)$/, '')
+);
+
+const getProjectSlug = (project) => {
+  return project.id.replace(/\.(md|mdx)$/, '');
+};
+
+const getVaultSlug = (vault) => {
+  return vault.id.replace(/\.(md|mdx)$/, '');
+};
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<style>
+			/* Mantenho os teus estilos originais, só adiciono o necessário para as imagens */
+			:root {
+				--accent: #8a63d2;
+				--accent-dark: #6e3ebb;
+				--accent-light: #9f8be0;
+				--black: #0d1117;
+				--gray: #8b949e;
+				--gray-light: #c9d1d9;
+				--gray-dark: #21262d;
+				--background: #0d1117;
+				--card-bg: #161b22;
+				--border: #30363d;
+				--box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+			}
+
+			body {
+				font-family: "Atkinson", -apple-system, BlinkMacSystemFont, sans-serif;
+				margin: 0;
+				padding: 0;
+				background: var(--background);
+				color: var(--gray-light);
+				line-height: 1.6;
+			}
+
+			main {
+				width: 100%;
+				max-width: 1280px;
+				margin: 0 auto;
+				padding: 2rem;
+			}
+
+			.vault-hero {
+				width: 100%;
+				margin-bottom: 2rem;
+			}
+
+			.vault-hero img {
+				width: 100%;
+				height: 400px;
+				object-fit: cover;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+				border: 1px solid var(--border);
+			}
+
+			.vault-header {
+				text-align: center;
+				margin-bottom: 3rem;
+				padding: 2rem 0;
+				border-bottom: 1px solid var(--border);
+			}
+
+			.vault-header h1 {
+				font-size: 3rem;
+				margin: 0 0 1rem 0;
+				background: linear-gradient(135deg, #8a63d2 0%, #6e3ebb 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+
+			.vault-description {
+				font-size: 1.2rem;
+				color: var(--gray);
+				max-width: 600px;
+				margin: 0 auto;
+				line-height: 1.6;
+			}
+
+			.projects-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+				gap: 2rem;
+				margin-top: 2rem;
+			}
+
+			.project-card {
+				background: var(--card-bg);
+				border: 1px solid var(--border);
+				border-radius: 12px;
+				padding: 0;
+				transition: all 0.3s ease;
+				box-shadow: var(--box-shadow);
+				text-decoration: none;
+				color: inherit;
+				display: block;
+				overflow: hidden;
+			}
+
+			.project-card:hover {
+				border-color: var(--accent);
+				transform: translateY(-4px);
+				box-shadow: 0 8px 24px rgba(110, 62, 187, 0.2);
+				text-decoration: none;
+			}
+
+			.project-image {
+				width: 100%;
+				height: 200px;
+				object-fit: cover;
+				border-bottom: 1px solid var(--border);
+			}
+
+			.project-content {
+				padding: 1.5rem;
+			}
+
+			.project-header {
+				display: flex;
+				align-items: flex-start;
+				justify-content: space-between;
+				margin-bottom: 1rem;
+			}
+
+			.project-title {
+				font-size: 1.3rem;
+				margin: 0;
+				color: var(--accent-light);
+			}
+
+			.project-description {
+				color: var(--gray-light);
+				margin-bottom: 1.5rem;
+				line-height: 1.5;
+			}
+
+			.project-tech {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				margin-top: 1rem;
+			}
+
+			.empty-state {
+				text-align: center;
+				padding: 4rem 2rem;
+				color: var(--gray);
+			}
+
+			.empty-state h2 {
+				color: var(--accent);
+				margin-bottom: 1rem;
+			}
+
+			.no-image-placeholder {
+				width: 100%;
+				height: 200px;
+				background: var(--gray-dark);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border-bottom: 1px solid var(--border);
+				color: var(--gray);
+      }
+
+.related-posts {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--card-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.related-posts h3 {
+  color: var(--accent-light);
+  margin-bottom: 1rem;
+}
+
+.posts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.post-link {
+  color: var(--gray-light);
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.post-link:hover {
+  background: var(--gray-dark);
+  color: var(--accent-light);
+}
+			@media (max-width: 768px) {
+				main {
+					padding: 1rem;
+				}
+
+				.vault-header h1 {
+					font-size: 2rem;
+				}
+
+				.vault-hero img {
+					height: 250px;
+				}
+
+				.projects-grid {
+					grid-template-columns: 1fr;
+					gap: 1.5rem;
+				}
+
+				.project-content {
+					padding: 1rem;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				{heroImage && (
+					<div class="vault-hero">
+						<Image width={800} height={400} src={heroImage} alt={title} />
+					</div>
+				)}
+
+				<div class="vault-header">
+					<div class="date">
+						Created {pubDate.toLocaleDateString()}
+						{updatedDate && (
+							<div class="last-updated-on">
+								Last updated on {updatedDate.toLocaleDateString()}
+							</div>
+						)}
+					</div>
+					<h1>{title}</h1>
+					<p class="vault-description">{description}</p>
+				</div>
+
+				<div class="vault-content">
+					<slot />
+				</div>
+
+				<section class="projects-section">
+					<h2 style="text-align: center; margin-bottom: 2rem; color: var(--accent-light);">
+						Projects in this Vault ({vaultProjects.length})
+					</h2>
+					
+					{vaultProjects.length > 0 ? (
+						<div class="projects-grid">
+							{vaultProjects.map((project) => (
+								<a href={`/vaults/${getVaultSlug(vault)}/${getProjectSlug(project)}/`} class="project-card">
+									{project.data.heroImage ? (
+										<Image 
+											width={400} 
+											height={200} 
+											src={project.data.heroImage} 
+											alt={project.data.title}
+											class="project-image" 
+										/>
+									) : (
+										<div class="no-image-placeholder">
+											No Image
+										</div>
+									)}
+									
+									<div class="project-content">
+										<div class="project-header">
+											<h3 class="project-title">{project.data.title}</h3>
+											<Tag tag={project.data.status} size="sm" />
+										</div>
+										
+										<p class="project-description">{project.data.description}</p>
+										
+										{project.data.tech && project.data.tech.length > 0 && (
+											<div class="project-tech">
+												{project.data.tech.slice(0, 4).map((technology) => (
+													<Tag tag={technology} size="sm" />
+												))}
+												{project.data.tech.length > 4 && (
+													<Tag tag={`+${project.data.tech.length - 4}`} size="sm" />
+												)}
+											</div>
+										)}
+									</div>
+								</a>
+							))}
+						</div>
+					) : (
+						<div class="empty-state">
+							<h2>No Projects Yet</h2>
+							<p>Projects will be added to this vault soon!</p>
+						</div>
+					)}
+				</section>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

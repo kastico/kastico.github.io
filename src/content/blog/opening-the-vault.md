@@ -1,10 +1,11 @@
 ---
 title: Opening the vault
 description: The first post.
-pubDate: Oct 10 2025
+pubDate: 2025-10-10
 heroImage: ../../assets/blog-placeholder-3.jpg
+pinned: true
+tags: [misc, introduction, personal]
 ---
-
 
 *What is cracking the code?*
 

@@ -1,0 +1,273 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import Tag from '../../components/tag.astro';
+const allVaults = await getCollection('vaults');
+const vaults = allVaults.sort((a, b) => b.data.pubDate - a.data.pubDate);
+
+// Função para obter o slug
+const getVaultSlug = (vault) => {
+  return vault.id.replace(/\.(md|mdx)$/, '');
+};
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title="Vaults - My Project Collections" description="Explore my curated collections of projects and experiments" />
+		<style>
+			:root {
+				--accent: #8a63d2;
+				--accent-dark: #6e3ebb;
+				--accent-light: #9f8be0;
+				--black: #0d1117;
+				--gray: #8b949e;
+				--gray-light: #c9d1d9;
+				--gray-dark: #21262d;
+				--background: #0d1117;
+				--card-bg: #161b22;
+				--border: #30363d;
+				--box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+			}
+
+			body {
+				font-family: "Atkinson", -apple-system, BlinkMacSystemFont, sans-serif;
+				margin: 0;
+				padding: 0;
+				background: var(--background);
+				color: var(--gray-light);
+				line-height: 1.6;
+			}
+
+			main {
+				width: 100%;
+				max-width: 1280px;
+				margin: 0 auto;
+				padding: 2rem;
+			}
+
+			.page-header {
+				text-align: center;
+				margin-bottom: 3rem;
+				padding: 2rem 0;
+			}
+
+			.page-header h1 {
+				font-size: 3rem;
+				margin: 0 0 1rem 0;
+				background: linear-gradient(135deg, #8a63d2 0%, #6e3ebb 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+
+			.page-description {
+				font-size: 1.2rem;
+				color: var(--gray);
+				max-width: 600px;
+				margin: 0 auto;
+				line-height: 1.6;
+			}
+
+			.vaults-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+				gap: 2rem;
+				margin-top: 2rem;
+			}
+
+			.vault-card {
+				background: var(--card-bg);
+				border: 1px solid var(--border);
+				border-radius: 12px;
+				padding: 2rem;
+				transition: all 0.3s ease;
+				box-shadow: var(--box-shadow);
+				text-decoration: none;
+				color: inherit;
+				display: block;
+			}
+
+			.vault-card:hover {
+				border-color: var(--accent);
+				transform: translateY(-4px);
+				box-shadow: 0 8px 24px rgba(110, 62, 187, 0.2);
+				text-decoration: none;
+			}
+
+			.vault-card.pinned {
+				border-left: 4px solid var(--accent);
+				background: linear-gradient(90deg, rgba(110, 62, 187, 0.1) 0%, var(--card-bg) 100%);
+			}
+
+			.vault-header {
+				display: flex;
+				align-items: flex-start;
+				justify-content: space-between;
+				margin-bottom: 1rem;
+			}
+
+			.vault-title {
+				font-size: 1.5rem;
+				margin: 0;
+				color: var(--accent-light);
+			}
+
+			.vault-date {
+				color: var(--gray);
+				font-size: 0.9rem;
+				margin-bottom: 1rem;
+			}
+
+			.vault-description {
+				color: var(--gray-light);
+				margin-bottom: 1.5rem;
+				line-height: 1.5;
+			}
+
+			.vault-stats {
+				display: flex;
+				gap: 1.5rem;
+				margin-bottom: 1.5rem;
+				padding: 1rem;
+				background: rgba(110, 62, 187, 0.05);
+				border-radius: 8px;
+				border: 1px solid rgba(110, 62, 187, 0.1);
+			}
+
+			.stat {
+				text-align: center;
+			}
+
+			.stat-number {
+				font-size: 1.5rem;
+				font-weight: 600;
+				color: var(--accent);
+				display: block;
+			}
+
+			.stat-label {
+				font-size: 0.8rem;
+				color: var(--gray);
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+			}
+
+			.vault-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+			}
+
+			.vault-tag {
+				background: rgba(110, 62, 187, 0.2);
+				color: var(--accent-light);
+				padding: 0.3rem 0.8rem;
+				border-radius: 12px;
+				font-size: 0.8rem;
+				font-weight: 500;
+				border: 1px solid rgba(110, 62, 187, 0.3);
+			}
+
+			.empty-state {
+				text-align: center;
+				padding: 4rem 2rem;
+				color: var(--gray);
+			}
+
+			.empty-state h2 {
+				color: var(--accent);
+				margin-bottom: 1rem;
+			}
+
+			@media (max-width: 768px) {
+				main {
+					padding: 1rem;
+				}
+
+				.page-header h1 {
+					font-size: 2rem;
+				}
+
+				.vaults-grid {
+					grid-template-columns: 1fr;
+					gap: 1.5rem;
+				}
+
+				.vault-card {
+					padding: 1.5rem;
+				}
+
+				.vault-stats {
+					flex-direction: column;
+					gap: 1rem;
+					text-align: center;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<div class="page-header">
+				<h1>The Vaults</h1>
+				<p class="page-description">
+					Curated collections of completed projects and experiments. 
+					Each vault represents a focused area of my work and interests.
+				</p>
+			</div>
+
+			{vaults.length > 0 ? (
+				<div class="vaults-grid">
+					{vaults.map(vault => (
+						<a href={`/vaults/${getVaultSlug(vault)}/`} class:vault-card={true} class:pinned={vault.data.pinned}>
+							<div class="vault-header">
+								<h2 class="vault-title">{vault.data.title}</h2>
+								{vault.data.pinned && <span>📌</span>}
+							</div>
+							
+							<div class="vault-date">
+								Created {vault.data.pubDate.toLocaleDateString()}
+								{vault.data.updatedDate && (
+									<span> • Updated {vault.data.updatedDate.toLocaleDateString()}</span>
+								)}
+							</div>
+
+							<p class="vault-description">{vault.data.description}</p>
+
+							<div class="vault-stats">
+								<div class="stat">
+									<span class="stat-number">{vault.data.projects?.length || 0}</span>
+									<span class="stat-label">Projects</span>
+								</div>
+								<div class="stat">
+									<span class="stat-number">{vault.data.tags?.length || 0}</span>
+									<span class="stat-label">Technologies</span>
+								</div>
+							</div>
+
+	{vault.data.tags && vault.data.tags.length > 0 && (
+  <div class="vault-tags">
+    {vault.data.tags.slice(0, 4).map(tag => (
+      <Tag tag={tag} size="sm" />
+    ))}
+    {vault.data.tags.length > 4 && (
+      <Tag tag={`+${vault.data.tags.length - 4} more`} size="sm" />
+    )}
+  </div>
+)}
+						</a>
+					))}
+				</div>
+			) : (
+				<div class="empty-state">
+					<h2>No Vaults Yet</h2>
+					<p>I'm currently working on some amazing projects. Check back soon!</p>
+				</div>
+			)}
+		</main>
+		<Footer />
+	</body>
+</html>

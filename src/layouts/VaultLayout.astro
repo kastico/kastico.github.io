@@ -1,0 +1,359 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Header from '../components/Header.astro';
+
+type Props = CollectionEntry<'vaults'>['data'];
+
+const { title, description, pubDate, updatedDate, heroImage, projects } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} />
+		<style>
+			:root {
+				--accent: #8a63d2;
+				--accent-dark: #6e3ebb;
+				--accent-light: #9f8be0;
+				--black: #0d1117;
+				--gray: #8b949e;
+				--gray-light: #c9d1d9;
+				--gray-dark: #21262d;
+				--background: #0d1117;
+				--card-bg: #161b22;
+				--border: #30363d;
+				--box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+			}
+
+			body {
+				font-family: "Atkinson", -apple-system, BlinkMacSystemFont, sans-serif;
+				margin: 0;
+				padding: 0;
+				background: var(--background);
+				color: var(--gray-light);
+				line-height: 1.6;
+			}
+
+			main {
+				width: 100%;
+				max-width: 1280px;
+				margin: 0 auto;
+				padding: 2rem;
+			}
+
+			.hero-image {
+				width: 100%;
+				margin-bottom: 2rem;
+			}
+
+			.hero-image img {
+				width: 100%;
+				height: 400px;
+				object-fit: cover;
+				border-radius: 12px;
+				box-shadow: var(--box-shadow);
+				border: 1px solid var(--border);
+			}
+
+			.vault-header {
+				text-align: center;
+				margin-bottom: 3rem;
+				padding: 2rem 0;
+				border-bottom: 1px solid var(--border);
+			}
+
+			.vault-header h1 {
+				font-size: 3rem;
+				margin: 0 0 1rem 0;
+				background: linear-gradient(135deg, #8a63d2 0%, #6e3ebb 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+
+			.vault-description {
+				font-size: 1.2rem;
+				color: var(--gray);
+				max-width: 600px;
+				margin: 0 auto;
+				line-height: 1.6;
+			}
+
+			.date {
+				margin-bottom: 1rem;
+				color: var(--gray);
+				font-size: 0.9rem;
+			}
+
+			.last-updated-on {
+				font-style: italic;
+				margin-top: 0.5rem;
+			}
+
+			.projects-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+				gap: 2rem;
+				margin-top: 2rem;
+			}
+
+			.project-card {
+				background: var(--card-bg);
+				border: 1px solid var(--border);
+				border-radius: 12px;
+				padding: 1.5rem;
+				transition: all 0.3s ease;
+				box-shadow: var(--box-shadow);
+			}
+
+			.project-card:hover {
+				border-color: var(--accent);
+				transform: translateY(-4px);
+				box-shadow: 0 8px 24px rgba(110, 62, 187, 0.2);
+			}
+
+			.project-header {
+				display: flex;
+				align-items: flex-start;
+				justify-content: space-between;
+				margin-bottom: 1rem;
+			}
+
+			.project-title {
+				font-size: 1.3rem;
+				margin: 0;
+				color: var(--accent-light);
+			}
+
+			.project-status {
+				background: rgba(110, 62, 187, 0.2);
+				color: var(--accent-light);
+				padding: 0.3rem 0.8rem;
+				border-radius: 20px;
+				font-size: 0.8rem;
+				font-weight: 500;
+				border: 1px solid rgba(110, 62, 187, 0.3);
+			}
+
+			.project-description {
+				color: var(--gray-light);
+				margin-bottom: 1.5rem;
+				line-height: 1.5;
+			}
+
+			.project-features {
+				margin-bottom: 1.5rem;
+			}
+
+			.project-features h4 {
+				color: var(--accent);
+				margin-bottom: 0.5rem;
+				font-size: 0.9rem;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+			}
+
+			.features-list {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+
+			.features-list li {
+				padding: 0.3rem 0;
+				color: var(--gray);
+				font-size: 0.9rem;
+				position: relative;
+				padding-left: 1rem;
+			}
+
+			.features-list li:before {
+				content: "▸";
+				color: var(--accent);
+				position: absolute;
+				left: 0;
+			}
+
+			.project-links {
+				display: flex;
+				gap: 1rem;
+				flex-wrap: wrap;
+			}
+
+			.project-link {
+				background: rgba(110, 62, 187, 0.2);
+				color: var(--accent-light);
+				padding: 0.5rem 1rem;
+				border-radius: 6px;
+				text-decoration: none;
+				font-size: 0.9rem;
+				font-weight: 500;
+				border: 1px solid rgba(110, 62, 187, 0.3);
+				transition: all 0.3s ease;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+
+			.project-link:hover {
+				background: rgba(110, 62, 187, 0.3);
+				transform: translateY(-1px);
+				text-decoration: none;
+			}
+
+			.project-tech {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.5rem;
+				margin-top: 1rem;
+			}
+
+			.tech-tag {
+				background: rgba(110, 62, 187, 0.1);
+				color: var(--accent);
+				padding: 0.2rem 0.6rem;
+				border-radius: 12px;
+				font-size: 0.75rem;
+				border: 1px solid rgba(110, 62, 187, 0.2);
+			}
+
+			.vault-content {
+				max-width: 800px;
+				margin: 0 auto 3rem auto;
+				line-height: 1.7;
+			}
+
+			.vault-content h2 {
+				color: var(--accent-light);
+				margin: 2rem 0 1rem 0;
+				border-bottom: 1px solid var(--border);
+				padding-bottom: 0.5rem;
+			}
+
+			.vault-content h3 {
+				color: var(--gray-light);
+				margin: 1.5rem 0 0.5rem 0;
+			}
+
+			@media (max-width: 768px) {
+				main {
+					padding: 1rem;
+				}
+
+				.vault-header h1 {
+					font-size: 2rem;
+				}
+
+				.projects-grid {
+					grid-template-columns: 1fr;
+					gap: 1.5rem;
+				}
+
+				.project-card {
+					padding: 1rem;
+				}
+
+				.hero-image img {
+					height: 250px;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				{heroImage && (
+					<div class="hero-image">
+						<Image width={1200} height={400} src={heroImage} alt={title} />
+					</div>
+				)}
+				
+				<div class="vault-header">
+					<div class="date">
+						<FormattedDate date={pubDate} />
+						{
+							updatedDate && (
+								<div class="last-updated-on">
+									Last updated on <FormattedDate date={updatedDate} />
+								</div>
+							)
+						}
+					</div>
+					<h1>{title}</h1>
+					<p class="vault-description">{description}</p>
+				</div>
+
+				<div class="vault-content">
+					<slot />
+				</div>
+
+				{projects && projects.length > 0 && (
+					<section class="projects-section">
+						<h2 style="text-align: center; margin-bottom: 2rem; color: var(--accent-light);">
+							Projects in this Vault
+						</h2>
+						<div class="projects-grid">
+							{projects.map(project => (
+								<div class="project-card">
+									<div class="project-header">
+										<h3 class="project-title">{project.name}</h3>
+										{project.status && (
+											<span class="project-status">{project.status}</span>
+										)}
+									</div>
+									
+									<p class="project-description">{project.description}</p>
+									
+									{project.features && project.features.length > 0 && (
+										<div class="project-features">
+											<h4>Features</h4>
+											<ul class="features-list">
+												{project.features.map(feature => (
+													<li>{feature}</li>
+												))}
+											</ul>
+										</div>
+									)}
+									
+									{project.tech && project.tech.length > 0 && (
+										<div class="project-tech">
+											{project.tech.map(tech => (
+												<span class="tech-tag">{tech}</span>
+											))}
+										</div>
+									)}
+									
+									<div class="project-links">
+										{project.demoUrl && (
+											<a href={project.demoUrl} target="_blank" class="project-link">
+												<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+													<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+												</svg>
+												Live Demo
+											</a>
+										)}
+										{project.githubUrl && (
+											<a href={project.githubUrl} target="_blank" class="project-link">
+												<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+													<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+												</svg>
+												Source Code
+											</a>
+										)}
+									</div>
+								</div>
+							))}
+						</div>
+					</section>
+				)}
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

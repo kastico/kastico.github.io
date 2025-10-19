@@ -5,7 +5,7 @@ pubDate: 'Jun 01 2024'
 heroImage: '../../assets/blog-placeholder-5.jpg'
 ---
 
-### 🧬 Bio
+### Who? 
 
 **Name:** António Barbosa  
 **From:** Portugal 🇵🇹  
