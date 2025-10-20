@@ -196,6 +196,7 @@
   },
   "active": "029f55389794f68f",
   "lastOpenFiles": [
+    "src/components/Header.astro~",
     "src/styles/global.css~",
     "src/pages/vaults/index.astro~",
     "src/pages/about.astro~",
@@ -207,7 +208,6 @@
     "src/content/projects/nebula-cms.md",
     "src/content/projects/nebula-cms",
     "src/content/pages/about.md~",
-    "src/content/projects/personal-portfolio.md~",
     "src/content/vaults/graphic-design.md",
     "src/content/vaults/web-development.md",
     "src/content/blog/second-post.md",
