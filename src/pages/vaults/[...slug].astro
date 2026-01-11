@@ -1,0 +1,20 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import VaultLayout from '../../layouts/VaultLayout.astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('vaults');
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: post,
+	}));
+}
+type Props = CollectionEntry<'vaults'>;
+
+const post = Astro.props;
+const { Content } = await render(post);
+---
+
+<VaultLayout {...post.data}>
+	<Content />
+</VaultLayout>

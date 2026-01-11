@@ -1,214 +1,378 @@
 /*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+  GitHub Dark inspired theme with purple accents - MOBILE FIRST
+*/
 
 :root {
-  --accent: #d1c7f0;
+  --accent: #8a63d2;
   --accent-dark: #6e3ebb;
-  --black: 15, 18, 25;
-  --gray: 96, 115, 159;
-  --background: #0F0C23;
-  --gray-light: 229, 233, 240;
-  --gray-dark: 34, 41, 57;
-  --gray-gradient: rgba(var(--gray-light), 50%), #fff;
-  --box-shadow:
-    0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px
-    rgba(var(--gray), 33%);
+  --accent-light: #9f8be0;
+  --black: #0d1117;
+  --gray: #8b949e;
+  --gray-light: #c9d1d9;
+  --gray-dark: #21262d;
+  --background: #0d1117;
+  --card-bg: #161b22;
+  --border: #30363d;
+  --purple-gradient: linear-gradient(135deg, #8a63d2 0%, #6e3ebb 100%);
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 @font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-regular.woff") format("woff");
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
+  font-family: "Atkinson";
+  src: url("/fonts/atkinson-regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 @font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-bold.woff") format("woff");
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
+  font-family: "Atkinson";
+  src: url("/fonts/atkinson-bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Reset base para mobile */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px; /* Tamanho base para mobile */
+  -webkit-text-size-adjust: 100%; /* Previne zoom em iOS */
 }
 
 body {
-	font-family: "Atkinson", sans-serif;
-	margin: 0;
-	padding: 0;
-	text-align: left;
-	background: var(--background);
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: rgba(var(--gray-light), 0.9);
-	font-size: 20px;
-	line-height: 1.7;
+  font-family: "Atkinson", -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+  color: var(--gray-light);
+  line-height: 1.6;
+  font-size: 1rem; /* 16px base */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Container principal */
 main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
-	background: var(--background);
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 1rem;
+  min-height: 100vh;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: var(--accent);
-	line-height: 1.2;
+/* Layout para posts - Mobile First */
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
 }
 
+.main-content {
+  width: 100%;
+}
+
+.sidebar-posts {
+  width: 100%;
+}
+
+/* Cards para posts */
+.post-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: var(--box-shadow);
+  width: 100%;
+}
+
+.post-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(110, 62, 187, 0.2);
+}
+
+.post-card.pinned {
+  border-left: 4px solid var(--accent);
+  background: linear-gradient(90deg, rgba(110, 62, 187, 0.1) 0%, var(--card-bg) 100%);
+}
+
+/* Headers otimizados para mobile */
 h1 {
-	font-size: 3.052em;
-	color: #d1c7f0;
+  font-size: 1.75rem; /* Reduzido para mobile */
+  margin: 0 0 1rem 0;
+  background: var(--purple-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+  word-wrap: break-word;
 }
 
 h2 {
-	font-size: 2.441em;
-	color: #b8a9e8;
+  font-size: 1.5rem;
+  color: var(--accent-light);
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0.5rem;
+  margin: 1.5rem 0 1rem 0;
+  line-height: 1.3;
 }
 
 h3 {
-	font-size: 1.953em;
-	color: #9f8be0;
+  font-size: 1.25rem;
+  color: var(--gray-light);
+  margin: 1.25rem 0 0.75rem 0;
+  line-height: 1.3;
 }
 
 h4 {
-	font-size: 1.563em;
-	color: #866dd8;
+  font-size: 1.1rem;
+  color: var(--accent);
+  margin: 1rem 0 0.5rem 0;
 }
 
-h5 {
-	font-size: 1.25em;
-	color: #6e3ebb;
+h5, h6 {
+  font-size: 1rem;
+  color: var(--accent-dark);
+  margin: 0.75rem 0 0.5rem 0;
 }
 
-strong,
-b {
-	font-weight: 700;
-	color: var(--accent);
+/* Texto otimizado para mobile */
+p {
+  margin: 0 0 1.25rem 0;
+  color: var(--gray-light);
+  line-height: 1.6;
+  font-size: 1rem;
+  word-wrap: break-word;
 }
 
+/* Links com tamanho de toque adequado */
 a {
-	color: var(--accent);
-	text-decoration: none;
-	transition: color 0.3s ease;
+  color: var(--accent);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  padding: 0.125rem 0.25rem; /* Área de toque maior */
+  margin: -0.125rem -0.25rem; /* Compensa o padding */
+  border-radius: 4px;
 }
 
 a:hover {
-	color: var(--accent-dark);
-	text-decoration: underline;
+  color: var(--accent-light);
+  text-decoration: underline;
+  background: rgba(110, 62, 187, 0.1);
 }
 
-p {
-	margin-bottom: 1em;
-	color: rgba(var(--gray-light), 0.8);
+/* Form elements otimizados para touch */
+textarea,
+input,
+button,
+select {
+  font-size: 16px; /* Previne zoom no iOS */
+  min-height: 44px; /* Tamanho mínimo de toque */
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--gray-light);
+  font-family: inherit;
 }
 
-.prose p {
-	margin-bottom: 2em;
+textarea:focus,
+input:focus,
+button:focus,
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(110, 62, 187, 0.3);
 }
 
-textarea {
-	width: 100%;
-	font-size: 16px;
-	background: rgba(15, 12, 35, 0.8);
-	border: 1px solid var(--accent-dark);
-	color: rgba(var(--gray-light), 0.9);
-	border-radius: 4px;
-	padding: 0.5em;
-}
-
-input {
-	font-size: 16px;
-	background: rgba(15, 12, 35, 0.8);
-	border: 1px solid var(--accent-dark);
-	color: rgba(var(--gray-light), 0.9);
-	border-radius: 4px;
-	padding: 0.5em;
-}
-
+/* Tables responsivas */
 table {
-	width: 100%;
-	border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: 8px;
+  overflow-x: auto;
+  display: block;
+  font-size: 0.9rem;
 }
 
 th, td {
-	padding: 0.75em;
-	text-align: left;
-	border-bottom: 1px solid rgba(110, 62, 187, 0.3);
-	color: rgba(var(--gray-light), 0.8);
+  padding: 0.75rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  color: var(--gray-light);
+  min-width: 120px; /* Evita células muito pequenas */
 }
 
 th {
-	color: var(--accent);
-	background: rgba(110, 62, 187, 0.1);
+  color: var(--accent);
+  background: rgba(110, 62, 187, 0.1);
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 
+/* Images responsivas */
 img {
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
 }
 
+/* Code blocks responsivos */
 code {
-	padding: 2px 5px;
-	background-color: rgba(110, 62, 187, 0.2);
-	color: var(--accent);
-	border-radius: 4px;
-	font-family: monospace;
+  padding: 0.2em 0.4em;
+  background-color: rgba(110, 62, 187, 0.2);
+  color: var(--accent-light);
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.85em;
+  border: 1px solid rgba(110, 62, 187, 0.3);
+  word-break: break-word;
 }
 
 pre {
-	padding: 1.5em;
-	border-radius: 8px;
-	background-color: rgba(15, 12, 35, 0.9);
-	border: 1px solid rgba(110, 62, 187, 0.3);
-	overflow-x: auto;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  margin: 1rem 0;
+  font-size: 0.85rem;
 }
 
 pre > code {
-	all: unset;
-	background: transparent;
-	color: var(--accent);
-}
-
-blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
-	color: rgba(var(--gray-light), 0.8);
-	background: rgba(110, 62, 187, 0.1);
-	padding: 1em;
-	border-radius: 0 8px 8px 0;
-}
-
-hr {
+  all: unset;
+  background: transparent;
+  color: var(--accent-light);
   border: none;
-  border-top: 1px solid rgba(110, 62, 187, 0.3);
-  margin: 2em 0;
+  padding: 0;
+  font-size: inherit;
 }
 
-/* Additional dark theme elements */
-::selection {
-  background: rgba(110, 62, 187, 0.3);
-  color: var(--accent);
+/* Blockquotes */
+blockquote {
+  border-left: 4px solid var(--accent);
+  padding: 1rem 1rem 1rem 1.5rem;
+  margin: 1.5rem 0;
+  color: var(--gray);
+  background: rgba(110, 62, 187, 0.05);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
 }
 
-::-moz-selection {
-  background: rgba(110, 62, 187, 0.3);
-  color: var(--accent);
+/* Tags otimizadas para mobile */
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
 }
 
-/* Scrollbar styling for webkit browsers */
+.tag {
+  background: rgba(110, 62, 187, 0.2);
+  color: var(--accent-light);
+  padding: 0.5rem 0.75rem; /* Maior para toque */
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid rgba(110, 62, 187, 0.3);
+  transition: all 0.3s ease;
+  min-height: 32px; /* Tamanho mínimo de toque */
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Intro section mobile */
+.intro-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Media Queries para tablets */
+@media (min-width: 768px) {
+  html {
+    font-size: 17px;
+  }
+  
+  main {
+    padding: 1.5rem;
+    max-width: 1200px;
+  }
+  
+  h1 {
+    font-size: 2.25rem;
+  }
+  
+  h2 {
+    font-size: 1.75rem;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+  }
+  
+  .post-card {
+    padding: 1.5rem;
+  }
+  
+  .intro-section {
+    padding: 2rem;
+  }
+}
+
+/* Media Queries para desktop */
+@media (min-width: 1024px) {
+  html {
+    font-size: 18px;
+  }
+  
+  .posts-container {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 3rem;
+    align-items: start;
+  }
+  
+  .main-content {
+    grid-column: 1;
+  }
+  
+  .sidebar-posts {
+    grid-column: 2;
+  }
+  
+  main {
+    padding: 2rem;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+  }
+}
+
+/* Melhorias de acessibilidade e performance */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Scrollbar consistente */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -226,29 +390,49 @@ hr {
   background: var(--accent);
 }
 
-@media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
-	main {
-		padding: 1em;
-	}
+/* Selection */
+::selection {
+  background: rgba(110, 62, 187, 0.3);
+  color: var(--accent-light);
+}
+
+::-moz-selection {
+  background: rgba(110, 62, 187, 0.3);
+  color: var(--accent-light);
 }
 
 .sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
-	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
-	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
-	white-space: nowrap;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px);
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Prevenir zoom desnecessário em inputs no iOS */
+@media (max-width: 768px) {
+  input[type="color"],
+  input[type="date"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="email"],
+  input[type="month"],
+  input[type="number"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="text"],
+  input[type="time"],
+  input[type="url"],
+  input[type="week"],
+  select:focus,
+  textarea {
+    font-size: 16px !important;
+  }
 }
