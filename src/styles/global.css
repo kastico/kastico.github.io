@@ -1,13 +1,11 @@
 :root {
   --accent: #8a63d2;
-  --accent-dark: #6e3ebb;
   --accent-light: #9f8be0;
-  --background: #0d1117;
-  --card-bg: #161b22;
-  --border: #30363d;
-  --gray: #8b949e;
-  --gray-light: #c9d1d9;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --background: #080a0c;
+  --card-bg: #0f1114;
+  --border: #1e2228;
+  --gray: #7a8290;
+  --gray-light: #bcc4ce;
 }
 
 @font-face {
@@ -65,40 +63,28 @@ main {
 .post-card {
   background: var(--card-bg);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 1.25rem;
   margin-bottom: 1rem;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow);
-}
-
-.post-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(110, 62, 187, 0.2);
 }
 
 .post-card.pinned {
-  border-left: 4px solid var(--accent);
-  background: linear-gradient(90deg, rgba(110, 62, 187, 0.1) 0%, var(--card-bg) 100%);
+  border-left: 3px solid var(--accent);
 }
 
-/* Tipo */
+/* Tipografia */
 
 h1 {
   font-size: 1.75rem;
   margin: 0 0 1rem;
-  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent-light);
   line-height: 1.2;
 }
 
 h2 {
   font-size: 1.5rem;
-  color: var(--accent-light);
-  border-bottom: 2px solid var(--border);
+  color: var(--gray-light);
+  border-bottom: 1px solid var(--border);
   padding-bottom: 0.5rem;
   margin: 1.5rem 0 1rem;
   line-height: 1.3;
@@ -112,13 +98,13 @@ h3 {
 
 h4 {
   font-size: 1.1rem;
-  color: var(--accent);
+  color: var(--accent-light);
   margin: 1rem 0 0.5rem;
 }
 
 h5, h6 {
   font-size: 1rem;
-  color: var(--accent-dark);
+  color: var(--gray);
   margin: 0.75rem 0 0.5rem;
 }
 
@@ -128,19 +114,16 @@ p {
 }
 
 a {
-  color: var(--accent);
+  color: var(--accent-light);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s ease;
-  border-radius: 4px;
 }
 
 a:hover {
-  color: var(--accent-light);
   text-decoration: underline;
 }
 
-/* Forms */
+/* Formulários */
 
 textarea, input, button, select {
   font-size: 16px;
@@ -156,10 +139,9 @@ textarea, input, button, select {
 textarea:focus, input:focus, button:focus, select:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(110, 62, 187, 0.3);
 }
 
-/* Tables */
+/* Tabelas */
 
 table {
   width: 100%;
@@ -185,7 +167,7 @@ th {
   font-size: 0.85rem;
 }
 
-/* Img */
+/* Imagens */
 
 img {
   max-width: 100%;
@@ -194,16 +176,15 @@ img {
   border: 1px solid var(--border);
 }
 
-/* Code */
+/* Código */
 
 code {
   padding: 0.2em 0.4em;
-  background: rgba(110, 62, 187, 0.2);
+  background: rgba(138, 99, 210, 0.12);
   color: var(--accent-light);
   border-radius: 4px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 0.85em;
-  border: 1px solid rgba(110, 62, 187, 0.3);
   word-break: break-word;
 }
 
@@ -226,12 +207,10 @@ pre > code {
 /* Blockquote */
 
 blockquote {
-  border-left: 4px solid var(--accent);
-  padding: 1rem 1rem 1rem 1.5rem;
+  border-left: 3px solid var(--accent);
+  padding: 0.75rem 1rem 0.75rem 1.5rem;
   margin: 1.5rem 0;
   color: var(--gray);
-  background: rgba(110, 62, 187, 0.05);
-  border-radius: 0 8px 8px 0;
   font-size: 0.95rem;
 }
 
@@ -245,13 +224,12 @@ blockquote {
 }
 
 .tag {
-  background: rgba(110, 62, 187, 0.2);
+  background: rgba(138, 99, 210, 0.12);
   color: var(--accent-light);
-  padding: 0.5rem 0.75rem;
+  padding: 0.4rem 0.75rem;
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 500;
-  border: 1px solid rgba(110, 62, 187, 0.3);
   min-height: 32px;
   display: inline-flex;
   align-items: center;
@@ -267,6 +245,8 @@ blockquote {
   margin-bottom: 1.5rem;
   text-align: center;
 }
+
+/* Acessibilidade */
 
 .sr-only {
   position: absolute;
@@ -289,14 +269,13 @@ blockquote {
 
 /* Scrollbar */
 
-::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--background); }
-::-webkit-scrollbar-thumb { background: var(--accent-dark); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
 ::selection {
-  background: rgba(110, 62, 187, 0.3);
-  color: var(--accent-light);
+  background: rgba(138, 99, 210, 0.25);
+  color: var(--gray-light);
 }
 
 /* Tablet */
