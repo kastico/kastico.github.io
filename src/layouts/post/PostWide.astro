@@ -1,11 +1,10 @@
 ---
 import { Image } from 'astro:assets';
-import PageLayout from './PageLayout.astro';
+import PageLayout from '../PageLayout.astro';
 import Tag from '@components/tag.astro';
 import TableOfContents from '@components/TableOfContents.astro';
-import type { CollectionEntry } from 'astro:content';
 
-type Props = CollectionEntry<'blog'>['data'] & { headings?: any[] };
+interface Props { title: string; description?: string; pubDate: Date; updatedDate?: Date; heroImage?: any; tags?: string[]; headings?: any[]; }
 const { title, description, pubDate, updatedDate, heroImage, tags = [], headings = [] } = Astro.props;
 ---
 

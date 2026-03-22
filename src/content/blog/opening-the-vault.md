@@ -5,6 +5,7 @@ pubDate: 2025-10-10
 heroImage: ../../assets/blog-placeholder-3.jpg
 pinned: true
 tags: [misc, introduction, personal]
+layout: ../../layouts/post/PostCentered.astro
 ---
 
 *What is cracking the code?*

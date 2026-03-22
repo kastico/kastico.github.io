@@ -1,0 +1,114 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+const tagCounts: Record<string, number> = {};
+posts.forEach(p => (p.data.tags || []).forEach(t => {
+  tagCounts[t] = (tagCounts[t] || 0) + 1;
+}));
+const tags = Object.entries(tagCounts).sort(([,a],[,b]) => b - a);
+---
+
+<PageLayout title="Topics" description="Browse all topics.">
+  <style>
+    .search-wrap {
+      position: relative;
+      margin-bottom: 2.5rem;
+    }
+    #search-input {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      color: var(--gray-light);
+      font-size: 0.95rem;
+      font-family: inherit;
+      min-height: unset;
+    }
+    #search-input:focus { outline: none; border-color: var(--accent); }
+    #search-input::placeholder { color: var(--gray); }
+
+    .tags-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .tag-item {
+      background: var(--card-bg);
+      padding: 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.15s;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .tag-item:hover { background: #12161c; }
+    .tag-item:hover .tag-name { color: var(--accent-light); }
+    .tag-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--gray-light);
+      transition: color 0.15s;
+    }
+    .tag-num {
+      font-size: 0.72rem;
+      color: var(--gray);
+      background: var(--background);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.1rem 0.45rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .no-results { color: var(--gray); font-size: 0.9rem; padding: 2rem 0; display: none; }
+  </style>
+
+  <div class="page-head">
+    <h1 class="page-title">Topics</h1>
+    <p class="page-desc">{tags.length} topics across {posts.length} posts.</p>
+  </div>
+
+  <div class="search-wrap">
+    <input
+      id="search-input"
+      type="text"
+      placeholder="Search topics..."
+      autocomplete="off"
+      spellcheck="false"
+    />
+  </div>
+
+  <div class="tags-grid" id="tags-grid">
+    {tags.map(([tag, count]) => (
+      <a href={`/tags/${tag.toLowerCase()}/`} class="tag-item" data-tag={tag.toLowerCase()}>
+        <span class="tag-name">#{tag}</span>
+        <span class="tag-num">{count}</span>
+      </a>
+    ))}
+  </div>
+  <p class="no-results" id="no-results">No topics match your search.</p>
+</PageLayout>
+
+<script is:inline>
+  const input = document.getElementById('search-input');
+  const grid = document.getElementById('tags-grid');
+  const noResults = document.getElementById('no-results');
+
+  input.addEventListener('input', () => {
+    const q = input.value.toLowerCase().trim();
+    let visible = 0;
+    grid.querySelectorAll('.tag-item').forEach(item => {
+      const match = !q || item.dataset.tag.includes(q);
+      item.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    noResults.style.display = visible === 0 ? 'block' : 'none';
+  });
+</script>

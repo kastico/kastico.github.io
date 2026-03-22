@@ -1,99 +1,88 @@
 ---
-// Importa o markdown como componente Astro
-import AboutContent from '../content/pages/about.md';
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import BaseHead from '@components/BaseHead.astro';
-import Footer from '@components/Footer.astro';
-import FormattedDate from '@components/FormattedDate.astro';
-import Header from '@components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-
+import PageLayout from '../layouts/PageLayout.astro';
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<AboutContent>
-				</AboutContent>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+<PageLayout title="About" description="António Barbosa — designer, developer, tinkerer.">
+  <style>
+    .hero { padding: 4rem 0 3.5rem; border-bottom: 1px solid var(--border); margin-bottom: 4rem; }
+    .name-small { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); display: block; margin-bottom: 0.5rem; }
+    .name-big { font-size: clamp(4rem, 12vw, 9rem); font-weight: 700; letter-spacing: -0.04em; line-height: 0.88; color: var(--gray-light); margin: 0 0 2rem; }
+    .hero-tagline { font-size: 1rem; color: var(--gray); max-width: 420px; line-height: 1.7; margin: 0; }
+    .hero-tagline strong { color: var(--gray-light); }
 
+    .bio-text p { font-size: 0.92rem; line-height: 1.85; color: var(--gray); margin: 0 0 1.25rem; }
+    .bio-text p:last-child { margin: 0; }
+    .bio-text strong { color: var(--gray-light); font-weight: 600; }
+
+    .skill-group { margin-bottom: 1.25rem; }
+    .skill-group-title { font-size: 0.7rem; color: var(--accent-light); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+    .skill-tag { font-size: 0.72rem; padding: 0.2rem 0.5rem; border-radius: 3px; background: var(--card-bg); border: 1px solid var(--border); color: var(--gray-light); }
+
+    @media (max-width: 900px) {
+      .name-big { font-size: clamp(3.5rem, 14vw, 6rem); }
+    }
+  </style>
+
+  <div class="hero">
+    <span class="name-small">António Barbosa</span>
+    <h1 class="name-big">KASTICO</h1>
+    <p class="hero-tagline">
+      <strong>Designer turned developer</strong> from Portugal.
+      Building software by day, obsessing over custom setups by night.
+    </p>
+  </div>
+
+  <div class="two-col">
+    <div>
+      <span class="section-label">Story</span>
+      <div class="bio-text">
+        <p>I spent 20 of my 25 years in front of a computer — gaming, coding, designing, producing. It started with a family PC, a PS2, and an illegally downloaded copy of GTA Vice City that introduced me to the modding community. I was 8 or 9, replacing car textures and tweaking variables. That obsession with <strong>making things your own</strong> never left.</p>
+        <p>After studying Graphic Design at <strong>ESAD.CR</strong> and a programming course at <strong>CENCAL</strong>, I landed at a small company building their own business software. My focus is UI/UX and visual identity, but in a small team you end up doing everything — backend, deployment, the works.</p>
+        <p>I'm convinced that's the best way to start a career: learn everything, build versatility, understand the full stack of how things actually work.</p>
+        <p>Today I work mainly in <strong>C++ with Qt</strong>, with PostgreSQL on the backend. I'm exploring Zig on the side, and slowly making peace with JavaScript frameworks.</p>
+        <p>I'm a terminal guy. GUI is fine. But the terminal is power. You won't change my mind.</p>
+      </div>
+    </div>
+
+    <aside class="sidebar-sticky">
+      <div class="sidebar-block">
+        <span class="sidebar-label">Info</span>
+        <ul class="meta-list">
+          <li><span>Location</span><span class="meta-val">Portugal</span></li>
+          <li><span>Age</span><span class="meta-val">25</span></li>
+          <li><span>Education</span><span class="meta-val">ESAD.CR · CENCAL</span></li>
+          <li><span>Role</span><span class="meta-val">Software Developer</span></li>
+          <li><span>Focus</span><span class="meta-val">UI/UX · Full-stack</span></li>
+        </ul>
+      </div>
+      <div class="sidebar-block">
+        <span class="sidebar-label">Stack</span>
+        <div class="skill-group">
+          <div class="skill-group-title">Languages</div>
+          <div class="skill-tags">
+            {['C++', 'C', 'C#', 'Java', 'Python', 'JavaScript', 'Zig', 'Bash', 'HTML/CSS'].map(s => (
+              <span class="skill-tag">{s}</span>
+            ))}
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-title">Tools</div>
+          <div class="skill-tags">
+            {['Qt / QML', 'PostgreSQL', 'Docker', 'Git', 'Figma', 'Linux', 'Neovim'].map(s => (
+              <span class="skill-tag">{s}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-block">
+        <span class="sidebar-label">Links</span>
+        <ul class="meta-list">
+          <li><span>GitHub</span><a href="https://github.com/kastico" target="_blank" style="color:var(--accent-light);font-size:0.82rem;">kastico</a></li>
+          <li><span>Twitter</span><a href="https://x.com/_kastico" target="_blank" style="color:var(--accent-light);font-size:0.82rem;">_kastico</a></li>
+          <li><span>Mastodon</span><a href="https://m.webtoo.ls/@kastico" target="_blank" style="color:var(--accent-light);font-size:0.82rem;">@kastico</a></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</PageLayout>

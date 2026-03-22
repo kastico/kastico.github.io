@@ -1,0 +1,23 @@
+---
+/**
+ * POST LAYOUT 3 — MINIMAL
+ * Title, date, content only.
+ * Frontmatter: layout: ../../layouts/post/PostMinimal.astro
+ */
+import PageLayout from '../PageLayout.astro';
+
+interface Props { title: string; description?: string; pubDate: Date; updatedDate?: Date; heroImage?: any; tags?: string[]; }
+const { title, description, pubDate, updatedDate } = Astro.props;
+---
+
+<PageLayout title={title} description={description}>
+  <div class="post-minimal">
+    <a href="/blog" class="back-link">← Blog</a>
+    <h1 class="post-minimal-title">{title}</h1>
+    <span class="post-minimal-date">
+      {pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
+      {updatedDate && ` · Updated ${updatedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}`}
+    </span>
+    <div class="prose"><slot /></div>
+  </div>
+</PageLayout>

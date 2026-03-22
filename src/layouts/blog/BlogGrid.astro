@@ -1,0 +1,121 @@
+---
+/**
+ * BLOG LAYOUT 2 — GRID
+ * Left sidebar filters + image grid.
+ */
+import PageLayout from '../PageLayout.astro';
+import Tag from '@components/tag.astro';
+import { Image } from 'astro:assets';
+
+interface Props { posts: any[]; title?: string; description?: string; columns?: 2 | 3; }
+const { posts, title = 'Blog', description = 'All posts', columns = 3 } = Astro.props;
+const getSlug = (p) => p.id.replace(/\.(md|mdx)$/, '');
+const sorted = [...posts].sort((a, b) => b.data.pubDate - a.data.pubDate);
+
+const tagCounts: Record<string, number> = {};
+sorted.forEach(p => (p.data.tags || []).forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
+const allTags = Object.entries(tagCounts).sort(([,a],[,b]) => b - a).map(([t, c]) => ({ tag: t, count: c }));
+const visibleTags = allTags.slice(0, 12);
+const hiddenTags = allTags.slice(12);
+---
+
+<PageLayout title={title} description={description}>
+  <div class="blog-head">
+    <h1 class="page-title">{title}</h1>
+    <p class="page-desc">{description}</p>
+  </div>
+
+  <div class="blog-layout">
+    <aside class="blog-sidebar" id="blogSidebar">
+      <span class="blog-sidebar-label">Filter by tag</span>
+      <ul class="filter-list" id="filterList">
+        <li class="filter-list-item">
+          <button class="filter-list-btn active" data-tag="all">
+            <span>All posts</span>
+            <span class="filter-count">{sorted.length}</span>
+          </button>
+        </li>
+        {visibleTags.map(({ tag, count }) => (
+          <li class="filter-list-item">
+            <button class="filter-list-btn" data-tag={tag}>
+              <span>{tag}</span>
+              <span class="filter-count">{count}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+      {hiddenTags.length > 0 && (
+        <>
+          <div class="filter-overflow" id="filterOverflow">
+            <ul class="filter-list">
+              {hiddenTags.map(({ tag, count }) => (
+                <li class="filter-list-item">
+                  <button class="filter-list-btn" data-tag={tag}>
+                    <span>{tag}</span>
+                    <span class="filter-count">{count}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <button class="filter-overflow-toggle" id="filterToggle">
+            <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="4" r="1.5" fill="currentColor"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/><circle cx="8" cy="12" r="1.5" fill="currentColor"/></svg>
+            +{hiddenTags.length} more
+          </button>
+        </>
+      )}
+    </aside>
+
+    <div class="blog-content">
+      <div class="blog-grid" id="grid" style={`--cols: ${columns}`}>
+        {sorted.map(post => (
+          <a href={`/blog/${getSlug(post)}/`} class="blog-grid-card" data-tags={(post.data.tags || []).join(',')}>
+            {post.data.heroImage
+              ? <Image src={post.data.heroImage} alt={post.data.title} class="blog-card-img" width={600} height={400} />
+              : <div class="blog-card-placeholder"></div>
+            }
+            <div class="blog-card-body">
+              <h2 class="blog-card-title">{post.data.title}</h2>
+              {post.data.description && <p class="blog-card-desc">{post.data.description}</p>}
+              <div class="blog-card-footer">
+                <div class="tag-cloud">
+                  {(post.data.tags || []).slice(0, 2).map(t => <Tag tag={t} size="sm" />)}
+                </div>
+                <span class="blog-card-date">
+                  {post.data.pubDate.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
+                </span>
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sidebar = document.getElementById('blogSidebar');
+    const grid = document.getElementById('grid');
+    if (sidebar && grid) {
+      sidebar.addEventListener('click', e => {
+        const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-list-btn');
+        if (!btn) return;
+        sidebar.querySelectorAll('.filter-list-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tag = btn.dataset.tag!;
+        grid.querySelectorAll<HTMLAnchorElement>('[data-tags]').forEach(card => {
+          const tags = card.dataset.tags!.split(',').filter(Boolean);
+          card.style.display = (tag === 'all' || tags.includes(tag)) ? '' : 'none';
+        });
+      });
+    }
+    const toggle = document.getElementById('filterToggle');
+    const overflow = document.getElementById('filterOverflow');
+    if (toggle && overflow) {
+      overflow.style.display = 'none';
+      toggle.addEventListener('click', () => {
+        const open = overflow.style.display !== 'none';
+        overflow.style.display = open ? 'none' : 'block';
+      });
+    }
+  </script>
+</PageLayout>

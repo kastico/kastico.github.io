@@ -1,0 +1,6 @@
+---
+import BlogMagazine from '../../layouts/blog/BlogMagazine.astro';
+import { getCollection } from 'astro:content';
+const posts = await getCollection('blog');
+---
+<BlogMagazine posts={posts} title="Blog — Magazine Layout" description="Layout 3: featured post hero + side list." />

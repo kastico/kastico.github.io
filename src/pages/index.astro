@@ -1,325 +1,121 @@
 ---
-import BaseHead from '@components/BaseHead.astro';
-import Header from '@components/Header.astro';
-import Footer from '@components/Footer.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-import { getCollection } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+import { Image } from 'astro:assets';
 import Tag from '@components/tag.astro';
+import { getCollection } from 'astro:content';
+import { SITE_DESCRIPTION } from '../consts';
 
 const allPosts = await getCollection('blog');
-const latestPosts = allPosts
-  .sort((a, b) => b.data.pubDate - a.data.pubDate)
-  .slice(0, 4);
+const sorted = [...allPosts].sort((a, b) => b.data.pubDate - a.data.pubDate);
+const pinnedPost = allPosts.find(p => p.data.pinned);
 
-// Filtra posts pinned
-const pinnedPosts = allPosts
-  .filter(post => post.data.pinned)
-  .sort((a, b) => b.data.pubDate - a.data.pubDate);
+const tagCounts: Record<string, number> = {};
+allPosts.forEach(p => (p.data.tags || []).forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
+const popularTags = Object.entries(tagCounts).sort(([,a],[,b]) => b - a).map(([t]) => t);
 
-// Extrai todas as tags únicas e conta a frequência
-const tagCounts = {};
-allPosts.forEach(post => {
-  (post.data.tags || []).forEach(tag => {
-    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
-  });
-});
+const allVaults = await getCollection('vaults');
+const allProjects = await getCollection('projects');
 
-// Ordena tags por frequência (mais populares primeiro)
-const popularTags = Object.entries(tagCounts)
-  .sort(([,a], [,b]) => b - a)
-  .map(([tag]) => tag);
-
-// Função para obter o slug correto
-const getPostSlug = (post) => {
-  return post.id.replace(/\.(md|mdx)$/, '');
-};
+const getSlug = (p) => p.id.replace(/\.(md|mdx)$/, '');
+const rest = sorted.filter(p => p !== pinnedPost).slice(0, 6);
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-    <style>
-      :root {
-        --accent: #8a63d2;
-        --accent-dark: #6e3ebb;
-        --accent-light: #9f8be0;
-        --black: #0d1117;
-        --gray: #8b949e;
-        --gray-light: #c9d1d9;
-        --gray-dark: #21262d;
-        --background: #0d1117;
-        --card-bg: #161b22;
-        --border: #30363d;
-        --purple-gradient: linear-gradient(135deg, #8a63d2 0%, #6e3ebb 100%);
-        --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      }
+<PageLayout description={SITE_DESCRIPTION}>
+  <section class="hero">
+    <span class="hero-label">Digital Shelter</span>
+    <div class="hero-title-wrap">
+      <h1 class="hero-title">The<br /><em>Bunker</em></h1>
+      <img src="/bitmap.png" alt="Kastico" class="hero-logo" aria-hidden="true" />
+    </div>
+    <p class="hero-desc">A place to store knowledge, projects, thoughts, and experiments. Code, design, music — collected with intent.</p>
+    <div class="hero-nav">
+      <a href="/vaults" class="btn-primary">Explore Vaults</a>
+      <a href="/blog" class="btn-ghost">Read the Blog →</a>
+    </div>
+  </section>
 
-      body {
-        font-family: "Atkinson", -apple-system, BlinkMacSystemFont, sans-serif;
-        margin: 0;
-        padding: 0;
-        text-align: left;
-        background: var(--background);
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        color: var(--gray-light);
-        font-size: 16px;
-        line-height: 1.6;
-      }
-
-      main {
-        width: 100%;
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 2rem;
-        background: var(--background);
-      }
-
-      .posts-container {
-        display: grid;
-        grid-template-columns: 1fr 400px;
-        gap: 3rem;
-        align-items: start;
-      }
-
-      .main-content {
-        grid-column: 1;
-      }
-
-      .sidebar-posts {
-        grid-column: 2;
-      }
-
-      /* Cards mais pequenos */
-      .post-card {
-        background: var(--card-bg);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        transition: all 0.3s ease;
-        box-shadow: var(--box-shadow);
-      }
-
-      .post-card:hover {
-        border-color: var(--accent);
-        transform: translateY(-1px);
-        box-shadow: 0 6px 20px rgba(110, 62, 187, 0.2);
-      }
-
-      .post-card.pinned {
-        border-left: 3px solid var(--accent);
-        background: linear-gradient(90deg, rgba(110, 62, 187, 0.1) 0%, var(--card-bg) 100%);
-      }
-
-      /* Títulos mais pequenos nos cards */
-      .post-card h3 {
-        font-size: 1.1rem;
-        margin-bottom: 0.5rem;
-        line-height: 1.3;
-      }
-
-      .post-card p {
-        font-size: 0.85rem;
-        margin-bottom: 0.5rem;
-        line-height: 1.4;
-      }
-
-      h1, h2, h3, h4, h5, h6 {
-        margin: 0 0 1rem 0;
-        color: var(--gray-light);
-        line-height: 1.3;
-        font-weight: 600;
-      }
-
-      h2 {
-        font-size: 1.5rem;
-        color: var(--accent-light);
-        border-bottom: 1px solid var(--border);
-        padding-bottom: 0.5rem;
-        margin-bottom: 1rem;
-      }
-
-      a {
-        color: var(--accent);
-        text-decoration: none;
-        transition: all 0.3s ease;
-        font-weight: 500;
-      }
-
-      a:hover {
-        color: var(--accent-light);
-        text-decoration: underline;
-      }
-
-      .tags-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        margin-top: 0.5rem;
-      }
-
-      /* Remove os estilos antigos das tags já que agora usamos o componente Tag */
-      
-      /* Seção de tags populares */
-      .popular-tags {
-        background: var(--card-bg);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin-top: 2rem;
-      }
-
-      .popular-tags-grid {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-top: 1rem;
-      }
-
-      /* Remove os estilos antigos das popular-tags já que agora usamos o componente Tag */
-
-      .intro-section {
-        background: var(--card-bg);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-        text-align: center;
-      }
-
-      @media (max-width: 1024px) {
-        .posts-container {
-          grid-template-columns: 1fr;
-          gap: 2rem;
-        }
-        
-        .sidebar-posts {
-          grid-column: 1;
-        }
-        
-        main {
-          padding: 1rem;
-        }
-      }
-
-      @media (max-width: 768px) {
-        .post-card {
-          padding: 0.8rem;
-        }
-        
-        .popular-tags-grid {
-          gap: 0.4rem;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <Header />
-
-    <main>
-      <div class="posts-container">
-        <!-- Conteúdo principal à esquerda -->
-        <div class="main-content">
-          <!-- INTRO -->
-          <section class="intro-section">
-            <p class="italic" style="color: var(--gray);">Why this space exists?</p>
-
-            <p>
-              <em>The Bunker</em> — is my digital shelter.<br />
-              A place to store knowledge, projects, thoughts, and experiments.<br />
-              A collection of <strong>vaults</strong> — each one focused on a part of what I love:
-              design, development, music, and more.
-            </p>
-
-            <p>
-              This is where I'll write, build, and refine my craft.<br />
-              Sometimes code. Sometimes feelings.<br />
-              But always with intent.
-            </p>
-          </section>
-
-          <section class="post-card">
-            <p>
-              The <strong>Vaults</strong> are where I keep complete and finished projects — things that have reached
-              a final form.
-            </p>
-            <p style="margin-top: 1rem;">
-              The <strong>Blog</strong> is more like an open notebook: thoughts, small experiments, and reflections.
-              Some of these may eventually evolve into final projects stored in the Vaults.
-            </p>
-          </section>
-       </div>
-
-        <!-- Posts à direita -->
-        <div class="sidebar-posts">
-          <!-- PINNED POSTS -->
-          {pinnedPosts.length > 0 && (
-            <section>
-              <h2>Pinned Posts</h2>
-              {pinnedPosts.map(post => (
-                <div class="post-card pinned">
-                  <a href={`/blog/${getPostSlug(post)}/`}>
-                    <h3>{post.data.title}</h3>
-                    <p style="color: var(--gray); font-size: 0.8rem; margin-bottom: 0.3rem;">
-                      {post.data.pubDate.toLocaleDateString()}
-                    </p>
-                    <p style="font-size: 0.8rem;">{post.data.description}</p>
-                    <!-- TAGS NOS CARDS COM COMPONENTE TAG -->
-                    {post.data.tags && post.data.tags.length > 0 && (
-                      <div class="tags-container">
-                        {post.data.tags.map(tag => (
-                          <Tag tag={tag} size="sm" />
-                        ))}
-                      </div>
-                    )}
-                  </a>
-                </div>
-              ))}
-            </section>
-          )}
-
-          <!-- ÚLTIMOS POSTS -->
-          <section>
-            <h2>Latest Posts</h2>
-            {latestPosts.map(post => (
-              <div class="post-card">
-                <a href={`/blog/${getPostSlug(post)}/`}>
-                  <h3>{post.data.title}</h3>
-                  <p style="color: var(--gray); font-size: 0.8rem; margin-bottom: 0.3rem;">
-                    {post.data.pubDate.toLocaleDateString()}
-                  </p>
-                  <p style="font-size: 0.8rem;">{post.data.description}</p>
-                  <!-- TAGS NOS CARDS COM COMPONENTE TAG -->
-                  {post.data.tags && post.data.tags.length > 0 && (
-                    <div class="tags-container">
-                      {post.data.tags.map(tag => (
-                        <Tag tag={tag} size="sm" />
-                      ))}
-                    </div>
-                  )}
-                </a>
-              </div>
-            ))}
-          </section>
-
-          <!-- TAGS POPULARES ABAIXO DOS POSTS -->
-          <section class="popular-tags">
-            <h2>Explore Popular Tags</h2>
-            <p style="font-size: 0.9rem; color: var(--gray); margin-bottom: 1rem;">
-              Find posts by topics that interest you most
-            </p>
-            <div class="popular-tags-grid">
-              {popularTags.slice(0, 20).map(tag => (
-                <Tag tag={tag} href={`/tags/${tag.toLowerCase()}/`} size="md" />
-              ))}
-            </div>
-          </section>
-        </div>
+  <!-- VAULT STRIP -->
+  <section class="vault-strip">
+    <div class="vault-strip-inner">
+      <div class="vault-strip-label">
+        <span>Vaults</span>
+        <a href="/vaults" class="vault-strip-all">View all →</a>
       </div>
-    </main>
+      <div class="vault-strip-list">
+        {allVaults.map(vault => {
+          const slug = vault.id.replace(/\.(md|mdx)$/, '');
+          const count = allProjects.filter(p => p.data.vault === slug).length;
+          return (
+            <a href={`/vaults/${slug}/`} class="vault-strip-item">
+              <span class="vault-strip-name">{vault.data.title}</span>
+              <span class="vault-strip-count">{count}</span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  </section>
 
-    <Footer />
-  </body>
-</html>
+  <!-- POSTS -->
+  <div class="home-layout">
+    <div>
+      <div class="home-posts-grid">
+        <!-- Pinned: spans full width, larger -->
+        {pinnedPost && (
+          <a href={`/blog/${getSlug(pinnedPost)}/`} class="home-grid-card home-grid-pinned">
+            {pinnedPost.data.heroImage
+              ? <Image src={pinnedPost.data.heroImage} alt={pinnedPost.data.title} class="home-grid-img" width={1200} height={600} />
+              : <div class="home-grid-placeholder"></div>
+            }
+            <div class="home-grid-body">
+              <div class="home-grid-pinned-badge">Pinned</div>
+              <p class="home-grid-title">{pinnedPost.data.title}</p>
+              {pinnedPost.data.description && <p class="home-grid-desc">{pinnedPost.data.description}</p>}
+              <p class="home-grid-date">
+                {pinnedPost.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+              </p>
+            </div>
+          </a>
+        )}
+        <!-- Rest: 3-column grid -->
+        {rest.map(post => (
+          <a href={`/blog/${getSlug(post)}/`} class="home-grid-card">
+            {post.data.heroImage
+              ? <Image src={post.data.heroImage} alt={post.data.title} class="home-grid-img" width={600} height={400} />
+              : <div class="home-grid-placeholder"></div>
+            }
+            <div class="home-grid-body">
+              <p class="home-grid-title">{post.data.title}</p>
+              <p class="home-grid-date">
+                {post.data.pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+      <div class="home-all-link">
+        <a href="/blog" class="btn-ghost">All posts →</a>
+      </div>
+    </div>
+
+    <aside class="home-sidebar">
+      <div class="home-sidebar-block">
+        <span class="home-sidebar-label">About</span>
+        <p class="home-about">
+          <strong>Vaults</strong> — finished projects, organised by topic.<br /><br />
+          <strong>Blog</strong> — open notebook. Thoughts, experiments, work in progress.
+        </p>
+      </div>
+      {popularTags.length > 0 && (
+        <div class="home-sidebar-block">
+          <span class="home-sidebar-label">Topics</span>
+          <div class="tag-cloud">
+            {popularTags.slice(0, 12).map(t => (
+              <Tag tag={t} href={`/tags/${t.toLowerCase()}/`} size="sm" />
+            ))}
+          </div>
+        </div>
+      )}
+    </aside>
+  </div>
+</PageLayout>

@@ -1,0 +1,71 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+interface Props {
+  headings: Heading[];
+}
+const { headings } = Astro.props;
+const filtered = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+{filtered.length > 0 && (
+  <nav class="toc-nav">
+    <span class="toc-label">Contents</span>
+    <ul class="toc-list">
+      {filtered.map(h => (
+        <li class="toc-item">
+          <a
+            href={`#${h.slug}`}
+            class={`toc-link${h.depth === 3 ? ' h3' : ''}`}
+            data-toc={h.slug}
+          >
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}
+
+<script>
+  (() => {
+    const nav = document.querySelector('.toc-nav');
+    if (!nav) return;
+
+    const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('[data-toc]'));
+    if (!links.length) return;
+
+    const headingIds = links.map(l => l.dataset.toc!);
+
+    function setActive(id: string) {
+      links.forEach(l => {
+        l.classList.toggle('active', l.dataset.toc === id);
+      });
+    }
+
+    // Set first as default
+    if (headingIds[0]) setActive(headingIds[0]);
+
+    const observer = new IntersectionObserver(entries => {
+      // Find the topmost visible heading
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      if (visible.length > 0) {
+        setActive(visible[0].target.id);
+      }
+    }, {
+      rootMargin: '-60px 0px -40% 0px',
+      threshold: 0
+    });
+
+    headingIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+  })();
+</script>

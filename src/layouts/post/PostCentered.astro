@@ -1,0 +1,27 @@
+---
+/**
+ * POST LAYOUT 1 — CENTERED
+ * Classic centered prose. Best for essays, personal posts.
+ * Frontmatter: layout: ../../layouts/post/PostCentered.astro
+ */
+import { Image } from 'astro:assets';
+import PageLayout from '../PageLayout.astro';
+import Tag from '@components/tag.astro';
+
+interface Props { title: string; description?: string; pubDate: Date; updatedDate?: Date; heroImage?: any; tags?: string[]; }
+const { title, description, pubDate, updatedDate, heroImage, tags = [] } = Astro.props;
+---
+
+<PageLayout title={title} description={description}>
+  <div class="post-centered">
+    <a href="/blog" class="back-link">← Blog</a>
+    <h1 class="post-centered-title">{title}</h1>
+    <div class="post-centered-meta">
+      <span>{pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+      {updatedDate && <span>Updated {updatedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>}
+      {tags.length > 0 && <div class="tag-cloud">{tags.map(t => <Tag tag={t} size="sm" />)}</div>}
+    </div>
+    {heroImage && <Image src={heroImage} alt={title} class="post-hero-img" width={1360} height={580} />}
+    <div class="prose"><slot /></div>
+  </div>
+</PageLayout>

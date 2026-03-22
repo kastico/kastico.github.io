@@ -1,0 +1,6 @@
+---
+import BlogList from '../../layouts/blog/BlogList.astro';
+import { getCollection } from 'astro:content';
+const posts = await getCollection('blog');
+---
+<BlogList posts={posts} title="Blog — List Layout" description="Layout 1: editorial list with dates on the right." />

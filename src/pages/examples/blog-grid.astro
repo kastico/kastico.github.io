@@ -1,0 +1,6 @@
+---
+import BlogGrid from '../../layouts/blog/BlogGrid.astro';
+import { getCollection } from 'astro:content';
+const posts = await getCollection('blog');
+---
+<BlogGrid posts={posts} title="Blog — Grid Layout" description="Layout 2: card grid with thumbnails." columns={3} />

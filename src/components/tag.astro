@@ -10,32 +10,22 @@ interface Props {
 const { tag, href, size = 'md' } = Astro.props;
 const config = getTagConfig(tag);
 
-// Usando exatamente o mesmo padding do .tech-tag original
-const sizeClasses = {
-  sm: 'px-2 py-0.5 text-xs',    // Bem compacto
-  md: 'px-3 py-1 text-sm',      // Igual ao original
-  lg: 'px-4 py-1.5 text-base'   // Um pouco maior
-};
+const padding = size === 'sm' ? '0.2rem 0.5rem' : size === 'lg' ? '0.35rem 0.8rem' : '0.25rem 0.65rem';
+const fontSize = size === 'sm' ? '0.7rem' : size === 'lg' ? '0.85rem' : '0.75rem';
 
-const baseClasses = `inline-flex items-center rounded-xl font-medium transition-all duration-200 ${sizeClasses[size]}`;
-
-const tagStyles = {
-  'background': config.bgColor,
-  'color': config.textColor,
-  'padding': '0.3rem 0.8rem',
-  'border': `1px solid ${config.color}33`,
-  'font-size': '0.8rem',
-  'border-radius': '12px'
-};
+const style = `
+  background: ${config.bgColor};
+  color: ${config.textColor};
+  border: 1px solid ${config.color}30;
+  padding: ${padding};
+  font-size: ${fontSize};
+  border-radius: 4px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+`;
 ---
-{
-  href ? (
-    <a href={href} class={baseClasses} style={tagStyles}>
-      #{tag}
-    </a>
-  ) : (
-    <span class={baseClasses} style={tagStyles}>
-      #{tag}
-    </span>
-  )
+{href
+  ? <a href={href} style={style}>#{tag}</a>
+  : <span style={style}>#{tag}</span>
 }
