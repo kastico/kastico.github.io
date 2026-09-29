@@ -1,0 +1,40 @@
+---
+// Edit the path and CV files here (put the PDFs in /public)
+const path = [
+  { when: '2024 – now', what: 'Software Developer', where: 'Softpack' },
+  { when: '2023 – 2024', what: 'Programming Course', where: 'CENCAL' },
+  { when: '2018 – 2023', what: 'Graphic Design', where: 'ESAD.CR' },
+];
+const cvs = [
+  { label: 'CV (EN)', href: '/Antonio_Barbosa_CV_EN.pdf' },
+  { label: 'CV (PT)', href: '/Antonio_Barbosa_CV_PT.pdf' },
+];
+---
+
+<div class="sidebar-block">
+  <span class="sidebar-label">Path</span>
+  <ol class="timeline">
+    {path.map(p => (
+      <li>
+        <span class="when">{p.when}</span>
+        <span class="what">{p.what}</span>
+        <span class="where">{p.where}</span>
+      </li>
+    ))}
+  </ol>
+  <div class="cvs">
+    {cvs.map(c => <a href={c.href} download>{c.label} ↓</a>)}
+  </div>
+</div>
+
+<style>
+  .timeline { list-style: none; margin: 0 0 1rem; padding: 0 0 0 0.9rem; border-left: 1px solid var(--border); }
+  .timeline li { position: relative; display: grid; gap: 0.1rem; margin-bottom: 0.9rem; }
+  .timeline li::before { content: ""; position: absolute; left: -1.2rem; top: 0.35rem; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .when { font-size: 0.7rem; color: var(--gray); letter-spacing: 0.05em; }
+  .what { font-size: 0.85rem; color: var(--gray-light); }
+  .where { font-size: 0.78rem; color: var(--accent-light); }
+  .cvs { display: flex; gap: 0.5rem; }
+  .cvs a { font-size: 0.75rem; padding: 0.3rem 0.65rem; border: 1px solid var(--border); border-radius: 4px; background: var(--card-bg); color: var(--gray-light); }
+  .cvs a:hover { border-color: var(--accent); text-decoration: none; }
+</style>
