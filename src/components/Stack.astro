@@ -1,0 +1,62 @@
+---
+// Edit the stack here (same tags as the CV)
+const stack = [
+  { label: 'Daily', items: ['C++', 'Qt / QML', 'PostgreSQL', 'SQLite', 'CMake', 'Git', 'Linux'] },
+  { label: 'Comfortable', items: ['Bash', 'Docker', 'Proxmox', 'Figma', 'Neovim'] },
+  { label: 'Exploring', items: ['JavaScript', 'Embedded', 'Raspberry Pi', 'CI/CD'], dashed: true },
+];
+const platforms = ['Linux', 'Windows', 'macOS', 'Android'];
+---
+
+<section class="stack" aria-labelledby="stack-title">
+  <div class="stack-head">
+    <span class="section-label" id="stack-title">Stack</span>
+    <p class="stack-who">António Barbosa · software developer · designer at heart</p>
+  </div>
+
+  <dl class="stack-list">
+    {stack.map(g => (
+      <div class="stack-row">
+        <dt>{g.label}</dt>
+        <dd>
+          <ul class="chips">
+            {g.items.map(s => <li class:list={['chip', { dashed: g.dashed }]}>{s}</li>)}
+          </ul>
+        </dd>
+      </div>
+    ))}
+    <div class="stack-row">
+      <dt>Platforms</dt>
+      <dd class="platforms">{platforms.join('   ')}</dd>
+    </div>
+  </dl>
+</section>
+
+<style>
+  .stack { margin: 0 0 4rem; }
+  .stack-head { margin-bottom: 1.1rem; }
+  .stack-who { margin: 0.35rem 0 0; font-size: 0.95rem; color: var(--gray); }
+
+  .stack-list { margin: 0; border-top: 1px solid var(--border); }
+  .stack-row {
+    display: grid; grid-template-columns: 9rem 1fr; gap: 0.6rem 1.5rem; align-items: baseline;
+    padding: 1rem 0; border-bottom: 1px solid var(--border);
+  }
+  .stack-row dt { font-size: 0.85rem; color: var(--gray); }
+  .stack-row dd { margin: 0; }
+
+  /* tags: same style as the CV */
+  .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .chip {
+    font-size: 0.82rem; line-height: 1;
+    padding: 0.42rem 0.7rem;
+    border: 1px solid var(--border); border-radius: 4px;
+    color: var(--gray-light);
+  }
+  .chip.dashed { border-style: dashed; border-color: var(--accent-light); color: var(--accent-light); }
+  .platforms { font-size: 0.9rem; color: var(--gray-light); white-space: pre-wrap; }
+
+  @media (max-width: 600px) {
+    .stack-row { grid-template-columns: 1fr; gap: 0.5rem; }
+  }
+</style>

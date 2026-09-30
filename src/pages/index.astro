@@ -22,25 +22,42 @@ const rest = sorted.filter(p => p !== pinnedPost).slice(0, 6);
 
 <PageLayout description={SITE_DESCRIPTION}>
   <style>
-    /* New logo is wide (865x370), the old one was square, so it gets its own sizing.
-       If your global CSS still has a .hero-logo rule, delete it. */
+    /* Hero: title on the left, logo on the right, both sitting on the same baseline */
+    .hero-title-wrap {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem 2rem;
+    }
+    /* "BUNKER" keeps the big bold style, "Labs" is the small, thin second line */
+    .hero-title em {
+      display: block;
+      margin-top: 0.4rem;
+      font-style: normal;
+      font-weight: 300;
+      font-size: 0.34em;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      color: var(--accent-light);
+    }
+    /* The logo is wide (865x370), the old one was square, so it gets its own sizing */
     .hero-title-wrap .hero-logo {
       display: block;
-      width: clamp(220px, 34vw, 440px);
+      width: clamp(200px, 34vw, 440px);
       height: auto;
       flex-shrink: 0;
-      align-self: center;
     }
     @media (max-width: 700px) {
-      .hero-title-wrap .hero-logo { width: clamp(150px, 42vw, 240px); }
+      .hero-title-wrap .hero-logo { width: clamp(140px, 44vw, 220px); }
     }
   </style>
 
   <section class="hero">
     <span class="hero-label">Digital Shelter</span>
     <div class="hero-title-wrap">
-      <h1 class="hero-title">The<br /><em>Bunker</em></h1>
-      <img src="/bunker-logo.svg" alt="" width="865" height="370" class="hero-logo" aria-hidden="true" />
+      <h1 class="hero-title">BUNKER<em>Labs</em></h1>
+      <img src="/logo.png" alt="" width="865" height="370" class="hero-logo" aria-hidden="true" />
     </div>
     <p class="hero-desc">A place to store knowledge, projects, thoughts, and experiments. Code, design, music — collected with intent.</p>
     <div class="hero-nav">

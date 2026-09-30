@@ -1,6 +1,6 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
-import StackTerminal from '../components/StackTerminal.astro';
+import Stack from '../components/Stack.astro';
 import Timeline from '../components/Timeline.astro';
 import ContactCard from '../components/ContactCard.astro';
 ---
@@ -22,13 +22,11 @@ import ContactCard from '../components/ContactCard.astro';
       background: linear-gradient(color-mix(in srgb, var(--accent-light) 32%, transparent), color-mix(in srgb, var(--accent-light) 32%, transparent)) 0 92% / 100% 0.38em no-repeat;
     }
 
-    .bio-text blockquote.terminal {
-      margin: 2.2rem 0 0; padding: 0.15rem 0 0.15rem 1.1rem;
+    .bio-text blockquote.quote {
+      margin: 2.2rem 0 0; padding: 0.1rem 0 0.1rem 1.25rem;
       border-left: 2px solid var(--accent-light);
-      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-      font-size: 0.9rem; line-height: 1.7; color: var(--gray-light);
+      font-size: 1.1rem; line-height: 1.6; color: var(--gray-light);
     }
-    .bio-text blockquote.terminal::before { content: "$ "; color: var(--accent-light); }
 
     @media (max-width: 900px) {
       .name-big { font-size: clamp(3.5rem, 14vw, 6rem); }
@@ -44,7 +42,7 @@ import ContactCard from '../components/ContactCard.astro';
     </p>
   </div>
 
-  <StackTerminal />
+  <Stack />
 
   <div class="two-col">
     <div>
@@ -54,7 +52,7 @@ import ContactCard from '../components/ContactCard.astro';
         <p>After studying Graphic Design at <strong>ESAD.CR</strong> and a programming course at <strong>CENCAL</strong>, I landed at a small company building their own business software. My focus is UI/UX and visual identity, but in a small team you end up doing everything — backend, deployment, the works.</p>
         <p>I'm convinced that's the best way to start a career: learn everything, build versatility, understand the full stack of how things actually work.</p>
         <p>Today I work mainly in <strong>C++ with Qt</strong> at Softpack, building cross-platform apps for Linux, Windows, macOS and Android. I built a kitchen display system from scratch, worked on migrating our apps from Qt 5 to Qt 6, and created a reusable QML component library, plus <strong>DataGrid</strong>, an open-source component you can find on my GitHub. On the side I'm exploring Zig and embedded, and slowly making peace with JavaScript frameworks.</p>
-        <blockquote class="terminal">I'm a terminal guy. GUI is fine. But the terminal is power. You won't change my mind.</blockquote>
+        <blockquote class="quote">I'm a terminal guy. GUI is fine. But the terminal is power. You won't change my mind.</blockquote>
       </div>
       <ContactCard />
     </div>
