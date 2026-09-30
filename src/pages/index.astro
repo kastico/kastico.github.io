@@ -21,11 +21,26 @@ const rest = sorted.filter(p => p !== pinnedPost).slice(0, 6);
 ---
 
 <PageLayout description={SITE_DESCRIPTION}>
+  <style>
+    /* New logo is wide (865x370), the old one was square, so it gets its own sizing.
+       If your global CSS still has a .hero-logo rule, delete it. */
+    .hero-title-wrap .hero-logo {
+      display: block;
+      width: clamp(220px, 34vw, 440px);
+      height: auto;
+      flex-shrink: 0;
+      align-self: center;
+    }
+    @media (max-width: 700px) {
+      .hero-title-wrap .hero-logo { width: clamp(150px, 42vw, 240px); }
+    }
+  </style>
+
   <section class="hero">
     <span class="hero-label">Digital Shelter</span>
     <div class="hero-title-wrap">
       <h1 class="hero-title">The<br /><em>Bunker</em></h1>
-      <img src="/bitmap.png" alt="Kastico" class="hero-logo" aria-hidden="true" />
+      <img src="/bunker-logo.svg" alt="" width="865" height="370" class="hero-logo" aria-hidden="true" />
     </div>
     <p class="hero-desc">A place to store knowledge, projects, thoughts, and experiments. Code, design, music — collected with intent.</p>
     <div class="hero-nav">
