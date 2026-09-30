@@ -10,12 +10,25 @@ import ContactCard from '../components/ContactCard.astro';
     .hero { padding: 4rem 0 3.5rem; border-bottom: 1px solid var(--border); margin-bottom: 4rem; }
     .name-small { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gray); display: block; margin-bottom: 0.5rem; }
     .name-big { font-size: clamp(4rem, 12vw, 9rem); font-weight: 700; letter-spacing: -0.04em; line-height: 0.88; color: var(--gray-light); margin: 0 0 2rem; }
-    .hero-tagline { font-size: 1rem; color: var(--gray); max-width: 420px; line-height: 1.7; margin: 0; }
-    .hero-tagline strong { color: var(--gray-light); }
+    .hero-tagline { font-size: clamp(1.15rem, 2.2vw, 1.5rem); color: var(--gray); max-width: 30ch; line-height: 1.45; margin: 0; }
+    .hero-tagline strong { color: var(--gray-light); font-weight: 600; }
 
-    .bio-text p { font-size: 0.92rem; line-height: 1.85; color: var(--gray); margin: 0 0 1.25rem; }
-    .bio-text p:last-child { margin: 0; }
-    .bio-text strong { color: var(--gray-light); font-weight: 600; }
+    /* story: bigger type, shorter lines, clear hierarchy */
+    .bio-text { max-width: 62ch; }
+    .bio-text p { font-size: 1rem; line-height: 1.8; color: var(--gray); margin: 0 0 1.4rem; }
+    .bio-text p.lead { font-size: 1.2rem; line-height: 1.65; color: var(--gray-light); margin-bottom: 1.8rem; }
+    .bio-text strong {
+      color: var(--gray-light); font-weight: 600;
+      background: linear-gradient(color-mix(in srgb, var(--accent-light) 32%, transparent), color-mix(in srgb, var(--accent-light) 32%, transparent)) 0 92% / 100% 0.38em no-repeat;
+    }
+
+    .bio-text blockquote.terminal {
+      margin: 2.2rem 0 0; padding: 0.15rem 0 0.15rem 1.1rem;
+      border-left: 2px solid var(--accent-light);
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.9rem; line-height: 1.7; color: var(--gray-light);
+    }
+    .bio-text blockquote.terminal::before { content: "$ "; color: var(--accent-light); }
 
     @media (max-width: 900px) {
       .name-big { font-size: clamp(3.5rem, 14vw, 6rem); }
@@ -37,11 +50,11 @@ import ContactCard from '../components/ContactCard.astro';
     <div>
       <span class="section-label">Story</span>
       <div class="bio-text">
-        <p>I've spent most of my life in front of a computer — gaming, coding, designing, producing. It started with a family PC, a PS2, and an illegally downloaded copy of GTA Vice City that introduced me to the modding community. I was 8 or 9, replacing car textures and tweaking variables. That obsession with <strong>making things your own</strong> never left.</p>
+        <p class="lead">I've spent most of my life in front of a computer — gaming, coding, designing, producing. It started with a family PC, a PS2, and an illegally downloaded copy of GTA Vice City that introduced me to the modding community. I was 8 or 9, replacing car textures and tweaking variables. That obsession with <strong>making things your own</strong> never left.</p>
         <p>After studying Graphic Design at <strong>ESAD.CR</strong> and a programming course at <strong>CENCAL</strong>, I landed at a small company building their own business software. My focus is UI/UX and visual identity, but in a small team you end up doing everything — backend, deployment, the works.</p>
         <p>I'm convinced that's the best way to start a career: learn everything, build versatility, understand the full stack of how things actually work.</p>
         <p>Today I work mainly in <strong>C++ with Qt</strong> at Softpack, building cross-platform apps for Linux, Windows, macOS and Android. I built a kitchen display system from scratch, worked on migrating our apps from Qt 5 to Qt 6, and created a reusable QML component library, plus <strong>DataGrid</strong>, an open-source component you can find on my GitHub. On the side I'm exploring Zig and embedded, and slowly making peace with JavaScript frameworks.</p>
-        <p>I'm a terminal guy. GUI is fine. But the terminal is power. You won't change my mind.</p>
+        <blockquote class="terminal">I'm a terminal guy. GUI is fine. But the terminal is power. You won't change my mind.</blockquote>
       </div>
       <ContactCard />
     </div>

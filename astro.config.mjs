@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://kastico.github.io',
+  site: 'https://bunker-labs.dev',
   vite: {
     resolve: {
       alias: {

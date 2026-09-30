@@ -1,4 +1,4 @@
-## The Bunker
+## Bunker Labs
 Welcome to my personal portfolio and blog!
 
 This space is where I showcase my projects, experiments, and creative work, while also sharing weekly posts about topics I’m exploring and learning about. My goal is to create a living record of my journey — both the successes and the lessons learned along the way.
