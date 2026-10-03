@@ -1,14 +1,16 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+import '@fontsource/orbitron/900.css';
+import '@fontsource/zen-dots/400.css';
 ---
 
 <header>
   <nav>
-    <a href="/" class="logo">
-      <img src="/logo.png" alt="Kastico logo" class="logo-img" width="28" height="28" />
-      <span class="logo-text">{SITE_TITLE}</span>
-    </a>
+<a href="/" class="logo">
+  <img src="/logo.png" alt="" class="logo-img" width="40" height="40" />
+  <span class="logo-text">BUNKER<em>Labs</em></span>
+</a>
 
     <div class="links">
       <HeaderLink href="/vaults">Vaults</HeaderLink>
@@ -49,13 +51,13 @@ import HeaderLink from './HeaderLink.astro';
 </header>
 
 <style>
-  header {
-    background: var(--background);
-    border-bottom: 1px solid var(--border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+header {
+  background-color: var(--background, #0a0b0d);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 
   nav {
     display: flex;
@@ -67,35 +69,67 @@ import HeaderLink from './HeaderLink.astro';
     padding: 0 1.5rem;
     position: relative;
   }
-
+  
   .logo {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    text-decoration: none;
-    flex-shrink: 0;
-  }
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  flex-shrink: 0;
+}
 
-  .logo:hover { text-decoration: none; }
-  .logo:hover .logo-text { color: var(--accent-light); }
+.logo:hover { text-decoration: none; }
+.logo:hover .logo-text em { color: var(--accent-light); }
 
-  .logo-img {
-    width: 28px;
-    height: 28px;
-    object-fit: contain;
-    opacity: 0.9;
-    flex-shrink: 0;
-    border: 0px;
-  }
+.logo-img {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  opacity: 0.9;
+  flex-shrink: 0;
+  border: 0;
+}
 
-  .logo-text {
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--gray-light);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    transition: color 0.15s;
-  }
+.logo-text {
+  --fs: 1.25rem; /* antes 1.4rem */
+  --halo: 1px;
+  position: relative;
+  display: inline-block;
+  transform: translateY(-0.1em);
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: var(--fs);
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #c5ccd8;
+}
+
+.logo-text em {
+  position: absolute;
+  left: calc(50% - var(--fs) * 0.03);
+  top: calc(var(--fs) * 0.64);
+  transform: translateX(-50%);
+  display: block;
+  font-family: 'Zen Dots', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: calc(var(--fs) * 0.5);
+  line-height: 1;
+  letter-spacing: 0.45em;
+  padding-left: 0.45em;
+  white-space: nowrap;
+  color: #a688e8;
+  text-shadow:
+    var(--halo) 0 0 var(--background), calc(var(--halo) * -1) 0 0 var(--background),
+    0 var(--halo) 0 var(--background), 0 calc(var(--halo) * -1) 0 var(--background),
+    var(--halo) var(--halo) 0 var(--background), calc(var(--halo) * -1) var(--halo) 0 var(--background),
+    var(--halo) calc(var(--halo) * -1) 0 var(--background), calc(var(--halo) * -1) calc(var(--halo) * -1) 0 var(--background);
+  transition: color 0.15s;
+}
+
+.logo-text i { font-style: normal; }
 
   .links {
     display: flex;

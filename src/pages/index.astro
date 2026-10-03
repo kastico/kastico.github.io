@@ -4,6 +4,8 @@ import { Image } from 'astro:assets';
 import Tag from '@components/tag.astro';
 import { getCollection } from 'astro:content';
 import { SITE_DESCRIPTION } from '../consts';
+import '@fontsource/orbitron/900.css';
+import '@fontsource/zen-dots/400.css';
 
 const allPosts = await getCollection('blog');
 const sorted = [...allPosts].sort((a, b) => b.data.pubDate - a.data.pubDate);
@@ -21,50 +23,232 @@ const rest = sorted.filter(p => p !== pinnedPost).slice(0, 6);
 ---
 
 <PageLayout description={SITE_DESCRIPTION}>
-  <style>
-    /* Hero: title on the left, logo on the right, both sitting on the same baseline */
-    .hero-title-wrap {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1.5rem 2rem;
-    }
-    /* "BUNKER" keeps the big bold style, "Labs" is the small, thin second line */
-    .hero-title em {
-      display: block;
-      margin-top: 0.4rem;
-      font-style: normal;
-      font-weight: 300;
-      font-size: 0.34em;
-      letter-spacing: 0.06em;
-      line-height: 1;
-      color: var(--accent-light);
-    }
-    /* The logo is wide (865x370), the old one was square, so it gets its own sizing */
-    .hero-title-wrap .hero-logo {
-      display: block;
-      width: clamp(200px, 34vw, 440px);
-      height: auto;
-      flex-shrink: 0;
-    }
-    @media (max-width: 700px) {
-      .hero-title-wrap .hero-logo { width: clamp(140px, 44vw, 220px); }
-    }
-  </style>
+<style>
+  /* o logo sangra para fora do ecrã: corta o excesso (tem de ser :global) */
+  :global(html),
+  :global(body) {
+    overflow-x: clip;
+  }
 
-  <section class="hero">
+  .hero {
+    --f: clamp(2.25rem, 8.3cqw, 6.5rem);
+    --logo-w: 66cqw;   /* largura do logo */
+    --logo-x: 34cqw;   /* 100cqw - --logo-w: o logo termina no limite do container */
+
+    position: relative;
+    isolation: isolate;
+    container-type: inline-size;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto 1fr;
+    justify-items: start;
+  }
+
+  /* label, título, descrição e botões passam a itens da grid do .hero */
+  .hero-copy { display: contents; }
+
+  .hero-copy .hero-label {
+    grid-row: 1;
+    margin: 0 0 0.75rem;
+    width: max-content;
+    white-space: nowrap;
+  }
+
+  .hero-title {
+    grid-row: 2;
+    display: block;
+    width: fit-content;
+    margin: 0;
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: var(--f);
+    line-height: 0.9;
+    color: #c5ccd8;
+  }
+
+  .hero-title em {
+    display: block;
+    margin-top: 0.32em;
+    font-family: 'Zen Dots', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 0.444em;
+    line-height: 0.66;
+    letter-spacing: 0.62em;
+    padding-left: 0.62em;
+    text-transform: uppercase;
+    color: #a688e8;
+  }
+
+  .hero-copy .hero-desc {
+    grid-row: 3;
+    margin: 2rem 0 0;
+    width: min(30rem, 34cqw);
+  }
+
+  .hero-copy .hero-nav {
+    grid-row: 4;
+    margin: 1.75rem 0 0;
+    width: max-content;
+  }
+
+  .hero-mark {
+    grid-row: 1 / 6;       /* começa na linha do label */
+    align-self: start;     /* topo alinhado com o "Digital Shelter" */
+    justify-self: start;
+    width: var(--logo-w);
+    margin-left: var(--logo-x);
+    height: auto;
+    aspect-ratio: 774.6 / 323.8;
+    display: block;
+    border: 0;
+    pointer-events: none;
+  }
+
+  /* ===== extras: base (mobile + desktop) ===== */
+
+  /* grelha técnica a desvanecer */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: -2rem 0 0 0;
+    z-index: -2;
+    background-image:
+      linear-gradient(rgba(166, 136, 232, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(166, 136, 232, 0.07) 1px, transparent 1px);
+    background-size: 3rem 3rem;
+    -webkit-mask-image: radial-gradient(ellipse 90% 60% at 50% 25%, #000 0%, transparent 75%);
+            mask-image: radial-gradient(ellipse 90% 60% at 50% 25%, #000 0%, transparent 75%);
+    pointer-events: none;
+  }
+
+
+  /* ponto "online" no label */
+  .hero-copy .hero-label::before {
+    content: '';
+    display: inline-block;
+    width: 0.45rem;
+    height: 0.45rem;
+    margin-right: 0.6rem;
+    border-radius: 50%;
+    background: #a688e8;
+    animation: hero-ping 2.4s ease-out infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes hero-ping {
+    0%        { box-shadow: 0 0 0 0 rgba(166, 136, 232, 0.55); }
+    80%, 100% { box-shadow: 0 0 0 0.6rem rgba(166, 136, 232, 0); }
+  }
+
+  /* descrição: mobile = traço curto centrado por cima */
+  .hero-copy .hero-desc::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    margin: 0 auto 1rem;
+    background: rgba(166, 136, 232, 0.45);
+  }
+
+  /* linha de estatísticas */
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    margin: 0;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(197, 204, 216, 0.12);
+  }
+  .hero-meta div { display: flex; flex-direction: column-reverse; gap: 0.2rem; }
+  .hero-meta dt {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+  .hero-meta dd {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.25rem;
+    color: #c5ccd8;
+  }
+
+  /* ===== mobile ===== */
+  @media (max-width: 900px) {
+    .hero {
+      --f: clamp(2.5rem, 11.5vw, 4.25rem);
+      grid-template-rows: none;
+      grid-template-areas: "label" "mark" "title" "desc" "nav" "meta";
+      justify-items: center;
+      text-align: center;
+    }
+    .hero-copy .hero-label { grid-area: label; margin: 0 0 1.25rem; }
+    .hero .hero-mark       { grid-area: mark; justify-self: center; align-self: auto; width: min(80%, 420px); margin: 0 0 1.25rem; }
+    .hero-title            { grid-area: title; }
+    .hero-copy .hero-desc  { grid-area: desc; margin: 1.75rem auto 0; width: auto; max-width: 440px; }
+    .hero-copy .hero-nav   { grid-area: nav; margin: 1.5rem 0 0; justify-content: center; width: auto; }
+    .hero-meta {
+      grid-area: meta;
+      justify-content: center;
+      width: min(100%, 440px);
+      margin-top: 2rem;
+    }
+  }
+
+  /* ===== desktop ===== */
+  @media (min-width: 901px) {
+    .hero::before {
+      -webkit-mask-image: radial-gradient(ellipse 70% 80% at 30% 40%, #000 0%, transparent 75%);
+              mask-image: radial-gradient(ellipse 70% 80% at 30% 40%, #000 0%, transparent 75%);
+    }
+
+    .hero::after {
+      top: -10%;
+      left: auto;
+      right: 0;
+      width: var(--logo-w);
+      transform: none;
+    }
+
+    /* régua à esquerda em vez do traço por cima */
+    .hero-copy .hero-desc::before { display: none; }
+    .hero-copy .hero-desc {
+      padding-left: 1rem;
+      border-left: 1px solid rgba(166, 136, 232, 0.35);
+    }
+
+    .hero-meta {
+      grid-row: 5;
+      align-self: start;
+      margin-top: 2.5rem;
+      width: min(30rem, 34cqw);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-copy .hero-label::before { animation: none; }
+  }
+</style>
+<section class="hero">
+  <div class="hero-copy">
     <span class="hero-label">Digital Shelter</span>
-    <div class="hero-title-wrap">
-      <h1 class="hero-title">BUNKER<em>Labs</em></h1>
-      <img src="/logo.png" alt="" width="865" height="370" class="hero-logo" aria-hidden="true" />
-    </div>
+    <h1 class="hero-title">BUNKER<em>Labs</em></h1>
     <p class="hero-desc">A place to store knowledge, projects, thoughts, and experiments. Code, design, music — collected with intent.</p>
     <div class="hero-nav">
       <a href="/vaults" class="btn-primary">Explore Vaults</a>
       <a href="/blog" class="btn-ghost">Read the Blog →</a>
     </div>
-  </section>
+    <dl class="hero-meta">
+      <div><dt>Vaults</dt><dd>{allVaults.length}</dd></div>
+      <div><dt>Projects</dt><dd>{allProjects.length}</dd></div>
+      <div><dt>Posts</dt><dd>{allPosts.length}</dd></div>
+    </dl>
+  </div>
+<svg class="hero-mark" viewBox="183.8 106.2 774.6 323.8" fill="#a688e8" aria-hidden="true" focusable="false">
+  <path d="M 432.23311,106.20296 320.24759,224.29658 v 58.36897 L 183.82993,429.94062 H 385.40389 V 253.48106 l 77.36941,-90.2678 h 109.27125 107.39703 l 77.37237,90.2678 V 429.94062 H 958.38786 L 821.97024,282.66555 V 224.29658 L 709.98472,106.20296 H 572.04455 Z m 52.0427,92.30281 -16.28918,16.96844 0.67639,221.25378 h 96.37582 V 198.50577 Z m 92.90318,0 v 238.22222 h 96.37583 l 0.67934,-221.25378 -16.28903,-16.96844 z m -118.69402,35.97186 -9.5018,8.82237 v 177.13891 l 9.5018,10.18105 z m 225.251,0 v 196.14233 l 9.50165,-10.18105 V 305.49203 243.3 Z"/>
+</svg>
+</section>
 
   <!-- VAULT STRIP -->
   <section class="vault-strip">
