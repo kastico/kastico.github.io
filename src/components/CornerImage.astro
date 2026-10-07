@@ -1,0 +1,82 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+type Corner = 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+type Length = number | string;
+
+interface Props {
+  image: ImageMetadata | string;
+  alt?: string;          // vazio por omissão: é decorativa
+  corner?: Corner;       // canto onde fica ancorada
+  x?: Length;            // deslocamento horizontal: + direita, - esquerda
+  y?: Length;            // deslocamento vertical: + baixo, - cima
+  size?: string;         // largura máxima (qualquer unidade CSS)
+  rotate?: number;       // graus
+  opacity?: number;      // 0 a 1
+  fixed?: boolean;       // true: fica no ecrã ao fazer scroll; false: fica no canto da página
+  hideBelow?: number;    // largura de ecrã (px) a que a imagem chega a 0 e desaparece
+  shrink?: number;       // ritmo a que encolhe: px de imagem perdidos por cada px de ecrã perdido
+}
+
+const {
+  image,
+  alt = '',
+  corner = 'bottom-left',
+  x = 0,
+  y = 0,
+  size = '300px',
+  rotate = 0,
+  opacity = 1,
+  fixed = true,
+  hideBelow = 900,
+  shrink = 0.5,
+} = Astro.props;
+
+// em mobile (<= 700px) some sempre, mesmo que hideBelow seja menor
+const hide = Math.max(hideBelow, 700);
+
+const len = (v: Length) => (typeof v === 'number' ? `${v}px` : v);
+const style =
+  `--x:${len(x)};--y:${len(y)};--size:${size};--rot:${rotate}deg;--op:${opacity};` +
+  `--hide:${hide}px;--shrink:${shrink};`;
+
+// id único para poder ter um breakpoint diferente em cada imagem
+const id = `ci-${Math.random().toString(36).slice(2, 8)}`;
+const hideCss = `@media (max-width:${hide}px){.${id}{display:none!important}}`;
+---
+
+<style is:inline set:html={hideCss}></style>
+<div class:list={['corner-image', id, corner, { fixed }]} style={style} aria-hidden={alt ? undefined : 'true'}>
+  {typeof image === 'string'
+    ? <img src={image} alt={alt} loading="lazy" />
+    : <Image src={image} alt={alt} />}
+</div>
+
+<style>
+  .corner-image {
+    position: absolute;
+    z-index: -1;               /* sempre atrás do conteúdo */
+    pointer-events: none;      /* nunca apanha cliques */
+    /* cresce com o ecrã a partir de --hide, até ao tamanho máximo --size */
+    width: clamp(0px, calc((100vw - var(--hide)) * var(--shrink)), var(--size));
+    opacity: var(--op);
+    transform: translate(var(--x), var(--y)) rotate(var(--rot));
+  }
+  .corner-image.fixed { position: fixed; }
+
+  .top-left     { top: 0;    left: 0; }
+  .top-right    { top: 0;    right: 0; }
+  .bottom-left  { bottom: 0; left: 0; }
+  .bottom-right { bottom: 0; right: 0; }
+
+  .corner-image :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    user-select: none;
+  }
+</style>

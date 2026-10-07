@@ -1,0 +1,58 @@
+---
+interface Props {
+  src: string;
+  poster?: string;
+  loop?: boolean;     // true = autoplay + mudo + loop, sem controlos
+  maxWidth?: string;
+  ratio?: string;     // proporção fixa do palco
+}
+const { src, poster, loop = false, maxWidth = '100%', ratio = '16 / 9' } = Astro.props;
+
+function ytId(s: string): string | null {
+  try {
+    const u = new URL(s);
+    if (u.hostname === 'youtu.be') return u.pathname.slice(1, 12);
+    if (u.hostname.endsWith('youtube.com')) {
+      const v = u.searchParams.get('v');
+      if (v) return v;
+      const m = u.pathname.match(/^\/(?:embed|shorts|live|v)\/([\w-]{11})/);
+      if (m) return m[1];
+    }
+  } catch {}
+  return null;
+}
+
+const id = ytId(src);
+const vm = src.match(/vimeo\.com\/(\d+)/);
+
+let embed: string | null = null;
+if (id) {
+  const p = loop
+    ? `autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&playsinline=1`
+    : 'rel=0';
+  embed = `https://www.youtube-nocookie.com/embed/${id}?${p}`;
+} else if (vm) {
+  embed = `https://player.vimeo.com/video/${vm[1]}${loop ? '?background=1' : ''}`;
+}
+---
+
+<div class="video" style={`max-width:${maxWidth};aspect-ratio:${ratio};`}>
+  {embed
+    ? <iframe src={embed} title="Vídeo" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+    : loop
+      ? <video src={src} poster={poster} autoplay muted loop playsinline></video>
+      : <video src={src} poster={poster} controls preload="metadata" playsinline></video>}
+</div>
+
+<style>
+  .video { margin: 2rem auto; border-radius: 8px; overflow: hidden; background: #000; }
+  .video :global(video),
+  .video :global(iframe) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border: 0;
+    object-fit: contain;
+  }
+</style>

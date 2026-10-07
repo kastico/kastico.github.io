@@ -1,0 +1,43 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { fullUrl } from '../utils/media';
+
+interface Props {
+  src: ImageMetadata | string;
+  alt?: string;
+  caption?: string;
+  maxWidth?: string;
+}
+const { src, alt = '', caption, maxWidth = '100%' } = Astro.props;
+const full = await fullUrl(src);
+---
+
+<figure style={`max-width:${maxWidth};`}>
+  {typeof src === 'string'
+    ? <img src={src} alt={alt} loading="lazy" data-lightbox="page" data-full={full} />
+    : <Image src={src} alt={alt} width={1600} data-lightbox="page" data-full={full} />}
+  {caption && <figcaption class="caption">{caption}</figcaption>}
+</figure>
+
+<style>
+  figure { margin: 2rem auto; }
+  figure :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    border-radius: var(--radius-media, 8px);
+    cursor: zoom-in;
+  }
+  .caption {
+    margin-top: 0.6rem;
+    font-size: 0.72rem;
+    font-style: italic;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--gray);
+    opacity: 0.85;
+  }
+</style>

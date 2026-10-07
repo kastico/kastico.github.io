@@ -1,0 +1,75 @@
+---
+interface Props {
+  src: string;
+  family?: string;
+  text?: string;
+  hint?: string;
+}
+
+const {
+  src,
+  family = 'Balastros',
+  text = '',
+  hint = 'Click and type to test the font',
+} = Astro.props;
+---
+
+<div
+  class="ft"
+  contenteditable="true"
+  spellcheck="false"
+  data-src={src}
+  data-family={family}
+  data-placeholder={hint}
+>{text}</div>
+
+<style>
+  .ft {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    min-height: 6rem;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    outline: none;
+    cursor: text;
+    color: var(--gray-light);
+    font-family: var(--family, serif);
+    font-size: 3rem;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    transition: border-color 0.15s;
+  }
+  .ft:hover {
+    border-color: var(--gray);
+  }
+  .ft:focus {
+    border-color: var(--accent-light);
+  }
+
+  /* placeholder visível quando está vazio */
+  .ft:empty::before {
+    content: attr(data-placeholder);
+    color: var(--gray);
+    font-family: inherit;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  @media (max-width: 700px) {
+    .ft {
+      font-size: 2rem;
+      padding: 1rem;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.ft').forEach(async (el) => {
+    const { src, family } = el.dataset;
+    const face = new FontFace(family!, `url(${src})`);
+    await face.load();
+    document.fonts.add(face);
+    el.style.setProperty('--family', `'${family}', serif`);
+  });
+</script>

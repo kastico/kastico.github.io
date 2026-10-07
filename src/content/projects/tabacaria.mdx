@@ -1,0 +1,83 @@
+---
+title: Tabacaria
+description: An artistic editorial edition of Fernando Pessoa's "Tabacaria", with handwritten text and graphics made from scanned screen-print ink.
+pubDate: 2000-02-01
+heroImage: ../../assets/tabacaria/capa.png
+status: Completed
+vault: graphic-design
+bannerLayout: left
+bannerSize: lg
+bannerFit: contain
+bannerRatio: auto
+tags:
+  - Editorial
+  - book design
+  - illustration
+features:
+  - Full poem handwritten and digitised
+  - Graphics from original drawings and scanned screen-print ink remnants
+  - Each word or phrase translated into a visual feeling
+tech:
+  - Scanner
+  - Screen printing
+---
+
+import Gallery from '@components/Gallery.astro';
+import Figure from '@components/Figure.astro';
+import Split from '@components/Split.astro';
+import CornerImage from '@components/CornerImage.astro';
+
+
+import capa from '@assets/tabacaria/capa.png';
+import blu from '@assets/tabacaria/blu.jpg';
+import gif from '@assets/tabacaria/gif.gif';
+import black from '@assets/tabacaria/black.png'
+
+<CornerImage image={gif} corner="bottom-left" size="320px" hideBelow={900} shrink={0.5} />
+
+
+## Concept
+
+**Tabacaria** is an *editorial book* that interprets a poem by **Fernando Pessoa** through **typography, handwriting and abstract graphic marks**. It was created for a university project whose goal was to give students a **first hands-on introduction to the editorial field**: each student chose a poem and was free to portray it as a book in *any way they wanted*.
+
+
+<Split image={capa} alt="Cover of the Tabacaria book" caption="The book" border={false}>
+I chose "Tabacaria". Instead of illustrating it literally, I tried to show graphically what each word or phrase *feels* like, turning the poem's **doubt, emptiness and restlessness** into visual form.
+
+The whole poem was **written by hand and then scanned**. Keeping the handwriting gave the text a fragile, personal voice, closer to *someone thinking out loud* than to a printed classic.
+</Split>
+
+## The Poem
+
+"Tabacaria" was written by **Fernando Pessoa** under the heteronym **Álvaro de Campos** and first published in **1933**. It is one of the best-known poems in Portuguese. The speaker looks out of his window at the *tobacconist's shop across the street* and uses it as a starting point to reflect on who he is: someone who feels he is **nothing** and will never be anything, yet carries **all the dreams in the world**.
+
+The poem moves between *grand metaphysical doubt* and *small everyday details*, between the inner world of dreams and the ordinary street outside.
+
+ **The vast against the trivial. Being against not being.**
+ That tension is what I tried to translate into the graphics.
+
+
+<Figure src={black} alt="Scanned screen-print ink remnants used as graphics" caption="Scanned ink remnants, the raw material for the graphics" maxWidth="800px" />
+
+## Process
+
+### Handwriting
+
+I wrote out the **complete poem by hand** and digitised **every page**. The irregularities of the pen (*hesitations, pressure changes, small errors*) were kept on purpose, since they carry part of the poem's mood.
+
+### Graphics
+
+The graphic elements come from two sources:
+
+- **My own drawings**
+- **Leftover screen-printing ink** that I had saved
+
+These ink remnants, with their *stains, layers and accidental textures*, were scanned and reworked digitally into shapes that stand for the emotions in the poem. **Nothing is decorative:** each mark is tied to a word, a line or a shift in tone.
+
+<Figure src={blu} alt="Scanned screen-print ink remnants used as graphics" caption="Scanned ink remnants, the raw material for the graphics" maxWidth="800px" />
+
+## The Book
+
+Each spread pairs a passage of **handwritten text** with a **graphic that translates its feeling**, so the reading rhythm follows the *emotional rhythm of the poem* rather than a conventional layout.
+
+<Gallery folder="tabacaria/gallery" columns={3} alt="Tabacaria book pages, 1 to 15" />

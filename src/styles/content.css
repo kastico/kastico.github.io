@@ -1,0 +1,84 @@
+:root {
+  --radius-media: 8px;
+  --fs-caption: 0.85rem;
+  --fs-label: 0.8rem;
+  --text-soft: color-mix(in srgb, currentColor 70%, transparent);
+
+  /* cor de destaque por tipo */
+  --callout-note: #378add;
+  --callout-idea: #1d9e75;
+  --callout-warning: #ba7517;
+
+  /* fundo por tipo (opcional: descomenta para escolheres tu) */
+  /* --callout-note-bg: #378add1f; */
+  /* --callout-idea-bg: #1d9e751f; */
+  /* --callout-warning-bg: #ba75171f; */
+}
+
+/* ---------- imagens do Markdown ---------- */
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+  border-radius: var(--radius-media);
+  cursor: zoom-in;
+}
+.prose a img { cursor: pointer; }
+
+/* ---------- descrição de imagem ---------- */
+.caption,
+.prose img + em {
+  font-size: var(--fs-caption);
+  font-style: normal;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--text-soft);
+}
+.caption { margin-top: 0.5rem; }
+.prose img + em { display: block; margin: -0.9rem 0 1.5rem; }
+
+/* ---------- callout (componente e blockquote) ---------- */
+.callout,
+.prose blockquote {
+  --c: var(--callout-note);
+  --bg: var(--callout-note-bg, color-mix(in srgb, var(--c) 12%, transparent));
+  margin: 1.5rem 0;
+  padding: 0.85rem 1.1rem;
+  border: 0;
+  border-left: 3px solid var(--c);
+  border-radius: 0;
+  background: var(--bg);
+  font-style: normal;
+  quotes: none;
+}
+.callout[data-type='idea'] {
+  --c: var(--callout-idea);
+  --bg: var(--callout-idea-bg, color-mix(in srgb, var(--c) 12%, transparent));
+}
+.callout[data-type='warning'] {
+  --c: var(--callout-warning);
+  --bg: var(--callout-warning-bg, color-mix(in srgb, var(--c) 12%, transparent));
+}
+
+.prose blockquote::before,
+.prose blockquote::after { content: none; }
+
+.callout > :first-child,
+.callout-body > :first-child,
+.prose blockquote > :first-child { margin-top: 0; }
+.callout-body > :last-child,
+.prose blockquote > :last-child { margin-bottom: 0; }
+
+.callout-title { display: block; margin-bottom: 0.25rem; }
+.callout strong,
+.prose blockquote strong { font-weight: 500; color: var(--c); }
+.prose blockquote > p:first-child:has(> strong:only-child) { margin-bottom: 0.25rem; }
+
+/* ---------- tabelas ---------- */
+.prose table { display: block; max-width: 100%; overflow-x: auto; }
+
+@media (max-width: 700px) {
+  .callout,
+  .prose blockquote { margin: 1.25rem 0; padding: 0.75rem 0.9rem; }
+}

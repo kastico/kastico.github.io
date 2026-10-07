@@ -1,0 +1,58 @@
+---
+interface Props {
+  type?: 'note' | 'idea' | 'warning';
+  title?: string;   // title="" esconde o título
+  color?: string;   // cor de destaque (borda + título), ex: '#e8553d'
+  bg?: string;      // cor de fundo, ex: '#e8553d22' ou 'var(--algo)'
+}
+const { type = 'note', title, color, bg } = Astro.props;
+const labels = { note: 'Nota', idea: 'O que aprendi', warning: 'Atenção' };
+
+const heading = title ?? labels[type];
+const style = [color && `--c:${color}`, bg && `--callout-fill:${bg}`].filter(Boolean).join(';');
+---
+
+<aside class="callout" data-type={type} style={style || undefined}>
+  {heading && <strong class="callout-title">{heading}</strong>}
+  <div class="callout-body"><slot /></div>
+</aside>
+
+<style>
+  .callout {
+    --c: var(--callout-note, #378add);
+    --callout-fill: var(--callout-note-bg, color-mix(in srgb, var(--c) 10%, var(--card-bg, transparent)));
+    margin: 1.5rem 0;
+    padding: 1rem 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--c) 35%, transparent);
+    border-radius: 12px;
+    background: var(--callout-fill);
+    color: var(--gray-light, inherit);
+    font-style: normal;
+    line-height: 1.6;
+  }
+  .callout[data-type='idea'] {
+    --c: var(--callout-idea, #1d9e75);
+    --callout-fill: var(--callout-idea-bg, color-mix(in srgb, var(--c) 10%, var(--card-bg, transparent)));
+  }
+  .callout[data-type='warning'] {
+    --c: var(--callout-warning, #ba7517);
+    --callout-fill: var(--callout-warning-bg, color-mix(in srgb, var(--c) 10%, var(--card-bg, transparent)));
+  }
+
+  .callout-title {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--c);
+  }
+  .callout-body :global(> :first-child) { margin-top: 0; }
+  .callout-body :global(> :last-child) { margin-bottom: 0; }
+  .callout-body :global(strong) { color: var(--c); }
+
+  @media (max-width: 700px) {
+    .callout { margin: 1.25rem 0; padding: 0.8rem 1rem; border-radius: 10px; }
+  }
+</style>

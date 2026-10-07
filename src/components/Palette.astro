@@ -1,0 +1,57 @@
+---
+interface Color { name?: string; hex: string }
+interface Props { colors: Color[] }
+const { colors } = Astro.props;
+
+// texto preto ou branco conforme a luminosidade da cor
+const ink = (hex: string) => {
+  const h = hex.replace('#', '');
+  const f = h.length === 3 ? h.split('').map((c) => c + c).join('') : h.slice(0, 6);
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(f.slice(i, i + 2), 16));
+  return 0.299 * r + 0.587 * g + 0.114 * b > 150 ? '#1a1a1a' : '#ffffff';
+};
+---
+
+<div class="palette">
+  {colors.map((c) => (
+    <button type="button" class="swatch" data-hex={c.hex} style={`background:${c.hex};color:${ink(c.hex)};`}>
+      {c.name && <span class="name">{c.name}</span>}
+      <span class="hex">{c.hex.toUpperCase()}</span>
+    </button>
+  ))}
+</div>
+
+<script>
+  document.addEventListener('click', async (e) => {
+    const btn = (e.target as Element).closest<HTMLButtonElement>('.swatch');
+    if (!btn) return;
+    const hex = btn.querySelector('.hex')!;
+    const original = hex.textContent;
+    try { await navigator.clipboard.writeText(btn.dataset.hex!); hex.textContent = 'Copiado'; }
+    catch { hex.textContent = 'Erro'; }
+    setTimeout(() => (hex.textContent = original), 1200);
+  });
+</script>
+
+<style>
+  .palette { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 2rem 0; }
+  .swatch {
+    flex: 1 1 120px;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 2px;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 0.8rem;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .swatch:hover { transform: translateY(-2px); }
+  .name { font-weight: 500; }
+  .hex { font-family: ui-monospace, monospace; opacity: 0.85; }
+</style>

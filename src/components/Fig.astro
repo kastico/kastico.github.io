@@ -1,0 +1,36 @@
+---
+import Figure from './Figure.astro';
+
+interface Props {
+  n: number | string;   // 3  ou  "1-4"
+  folder?: string;      // só se a pasta for diferente do slug da página
+  alt?: string;
+  caption?: string;
+  maxWidth?: string;
+}
+
+const { n, folder, alt = '', caption, maxWidth = '800px' } = Astro.props;
+
+const dir = folder ?? Astro.url.pathname.split('/').filter(Boolean).pop();
+
+const all = import.meta.glob<{ default: ImageMetadata }>(
+  '../assets/**/*.{png,jpg,jpeg,webp,avif}',
+  { eager: true }
+);
+
+const [a, b] = String(n).split('-').map(Number);
+const nums = Array.from({ length: (b ?? a) - a + 1 }, (_, i) => a + i);
+
+const imgs = nums.flatMap((i) => {
+  const name = String(i).padStart(2, '0');
+  const hit = Object.entries(all).find(([p]) =>
+    new RegExp(`/${dir}/${name}\\.\\w+$`).test(p)
+  );
+  if (!hit) console.warn(`Fig: ${dir}/${name} não encontrada`);
+  return hit ? [hit[1].default] : [];
+});
+---
+
+{imgs.map((src) => (
+  <Figure src={src} alt={alt} caption={caption} maxWidth={maxWidth} />
+))}

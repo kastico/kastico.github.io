@@ -1,0 +1,70 @@
+---
+title: Balatros
+description: Visual identity for a small studio — logo, typography, colour palette, and usage guidelines.
+pubDate: 2025-02-01
+heroImage: ../../assets/vira-lume/vira-lume.png
+status: Completed
+vault: graphic-design
+tags:
+  - typography
+features:
+  - Primary and secondary logo variants
+  - Type system with 3 weights
+tech:
+  - FontLab
+---
+
+import PdfCarousel from '@components/PdfCarousel.astro';
+import Slideshow from '@components/Slideshow.astro';
+import Gallery from '@components/Gallery.astro';
+import Figure from '@components/Figure.astro';
+import Video from '@components/Video.astro';
+import Palette from '@components/Palette.astro';
+import BeforeAfter from '@components/BeforeAfter.astro';
+import Split from '@components/Split.astro';
+import Callout from '@components/Callout.astro';
+import RepoCard from '@components/RepoCard.astro';
+import i1 from '@assets/balatros/01.png';
+import i2 from '@assets/balatros/02.png';
+import i3 from '@assets/balatros/03.png';
+import i4 from '@assets/balatros/04.png';
+import i5 from '@assets/balatros/05.png';
+import i6 from '@assets/balatros/06.png';
+import i7 from '@assets/balatros/07.png';
+import i8 from '@assets/balatros/08.png';
+import i9 from '@assets/balatros/09.png';
+import i10 from '@assets/balatros/10.png';
+import i11 from '@assets/balatros/11.png';
+import inspiration from '@assets/balatros/inspiration.png';
+
+## Concept
+
+**Balastros** is a typeface inspired by an English illuminated manuscript featuring the letter “T”. The original artwork had no recorded date or known author, but its distinctive forms provided the starting point for a new typeface while preserving and bringing renewed attention to the original design.
+
+<Split image={inspiration} alt="Provas de tipografia" caption="Testes iniciais em preto e branco">
+The organic shapes, elegant structure, and distinctive serifs of the illuminated “T” evoked the visual characteristics of court jesters, particularly the exaggerated forms of their traditional hats and shoes. This connection led to the name **Balastros**, a historical term associated with professional court jesters.
+</Split>
+
+The development of the typeface began by deconstructing the original illumination into a set of modular shapes. These elements became the foundation for constructing the rest of the alphabet, allowing the visual language of the original letterform to be extended into a complete type system.
+
+## Shapes
+
+<Figure src={i1} alt="Balastros" maxWidth="800px" />
+
+As the original modules could not directly produce every letter or symbol, some forms required a degree of interpretation and creative adaptation. These interventions were made while maintaining the core characteristics of the source material, creating a balance between historical reference and contemporary typographic design.
+Balastros therefore functions both as a reinterpretation of an anonymous historical artefact and as an exploration of how a single letterform can be transformed into a coherent and expressive typeface.
+
+<Figure src={i2} alt="Balastros" maxWidth="800px" />
+
+<Figure src={i3} alt="Balastros" maxWidth="800px" />
+
+<Figure src={i4} alt="Balastros" maxWidth="800px" />
+<Figure src={i5} alt="Balastros" maxWidth="800px" />
+<Figure src={i6} alt="Balastros" maxWidth="800px" />
+<Figure src={i7} alt="Balastros" maxWidth="800px" />
+<Figure src={i8} alt="Balastros" maxWidth="800px" />
+<Figure src={i9} alt="Balastros" maxWidth="800px" />
+<Figure src={i10} alt="Balastros" maxWidth="800px" />
+<Figure src={i11} alt="Balastros" maxWidth="800px" />
+
+<Gallery folder="balatros/posters" columns={2} alt="Balastros application" />

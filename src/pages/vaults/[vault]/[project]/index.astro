@@ -14,17 +14,41 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props;
-const { title, description, pubDate, updatedDate, heroImage, status, tech, features, demoUrl, githubUrl, websiteUrl } = project.data;
+const {
+  title, description, pubDate, updatedDate, heroImage, status, tech, features,
+  demoUrl, githubUrl, websiteUrl,
+  bannerImage,                  // imagem do banner (se faltar, usa heroImage)
+  showBanner = true,            // false = igual a bannerLayout: none
+  bannerLayout = 'below',       // below | right | left | background | none
+  bannerRatio,                  // ex: "21/9", "16/9", "4/5", "1/1", "auto"
+  bannerFit = 'cover',          // cover | contain
+  bannerSize = 'md',            // sm | md | lg (largura da imagem nos layouts right/left)
+  bannerPosition = 'center',    // ex: "center top", "50% 20%"
+} = project.data;
 const vaultSlug = project.data.vault;
 const { Content, headings } = await render(project);
 
 const allVaults = await getCollection('vaults');
 const parentVault = allVaults.find(v => v.id.replace(/\.(md|mdx)$/, '') === vaultSlug);
+
+// vaults de design têm um layout mais editorial (sem linguagem de código)
+const editorial = vaultSlug === 'graphic-design';
+const banner = bannerImage ?? heroImage;
+
+const layout = !showBanner || !banner ? 'none' : bannerLayout;
+const side = layout === 'left' || layout === 'right';
+const ratio = bannerRatio ?? (side ? 'auto' : '21 / 9');
+const mediaW = { sm: '30%', md: '40%', lg: '50%' }[bannerSize] ?? '40%';
+const vars = `--ratio:${ratio};--fit:${bannerFit};--pos:${bannerPosition};--media-w:${mediaW};`;
 ---
 
 <PageLayout title={title} description={description}>
-  <div class="project-head">
-    <div>
+  <div class:list={['project-head', { editorial }, editorial && `layout-${layout}`]} style={vars}>
+    {editorial && layout === 'background' && (
+      <div class="bg"><Image src={banner} alt="" width={1800} /></div>
+    )}
+
+    <div class="head-text">
       <div class="breadcrumb">
         <a href="/vaults">Vaults</a> &rsaquo;
         {parentVault && <><a href={`/vaults/${vaultSlug}/`}>{parentVault.data.title}</a> &rsaquo;</>}
@@ -32,6 +56,15 @@ const parentVault = allVaults.find(v => v.id.replace(/\.(md|mdx)$/, '') === vaul
       </div>
       <h1 class="project-head-title">{title}</h1>
       {description && <p class="project-head-desc">{description}</p>}
+
+      {editorial && (
+        <dl class="credits">
+          {status && <div><dt>Status</dt><dd><Tag tag={status} size="sm" /></dd></div>}
+          <div><dt>Year</dt><dd>{pubDate.getFullYear()}</dd></div>
+          {tech?.length > 0 && <div><dt>Tools</dt><dd>{tech.join(', ')}</dd></div>}
+        </dl>
+      )}
+
       {(demoUrl || githubUrl || websiteUrl) && (
         <div class="project-head-links">
           {demoUrl && <a href={demoUrl} target="_blank" class="link-btn primary">Live Demo</a>}
@@ -40,9 +73,20 @@ const parentVault = allVaults.find(v => v.id.replace(/\.(md|mdx)$/, '') === vaul
         </div>
       )}
     </div>
+
+    {editorial && side && (
+      <div class="head-media"><Image src={banner} alt={title} width={1000} /></div>
+    )}
   </div>
 
-  {heroImage && <Image src={heroImage} alt={title} class="hero-img" width={1200} height={400} />}
+  {editorial && layout === 'below' && (
+    <div class="banner" style={vars}>
+      <Image src={banner} alt={title} width={1680} />
+    </div>
+  )}
+  {!editorial && layout !== 'none' && (
+    <Image src={banner} alt={title} class="hero-img" width={1200} height={400} style={`object-position:${bannerPosition};`} />
+  )}
 
   <div class="post-toc-wrap">
     <aside class="toc-sidebar">
@@ -52,15 +96,17 @@ const parentVault = allVaults.find(v => v.id.replace(/\.(md|mdx)$/, '') === vaul
       <Content />
     </div>
     <aside class="toc-sidebar">
-      <div class="sidebar-block">
-        <span class="sidebar-label">Details</span>
-        <ul class="meta-list">
-          {status && <li><span>Status</span><Tag tag={status} size="sm" /></li>}
-          <li><span>Created</span><span class="meta-val">{pubDate.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</span></li>
-          {updatedDate && <li><span>Updated</span><span class="meta-val">{updatedDate.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</span></li>}
-        </ul>
-      </div>
-      {tech?.length > 0 && (
+      {!editorial && (
+        <div class="sidebar-block">
+          <span class="sidebar-label">Details</span>
+          <ul class="meta-list">
+            {status && <li><span>Status</span><Tag tag={status} size="sm" /></li>}
+            <li><span>Created</span><span class="meta-val">{pubDate.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</span></li>
+            {updatedDate && <li><span>Updated</span><span class="meta-val">{updatedDate.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</span></li>}
+          </ul>
+        </div>
+      )}
+      {!editorial && tech?.length > 0 && (
         <div class="sidebar-block">
           <span class="sidebar-label">Tech</span>
           <div class="tag-cloud">{tech.map(t => <Tag tag={t} size="sm" />)}</div>
@@ -68,7 +114,7 @@ const parentVault = allVaults.find(v => v.id.replace(/\.(md|mdx)$/, '') === vaul
       )}
       {features?.length > 0 && (
         <div class="sidebar-block">
-          <span class="sidebar-label">Features</span>
+          <span class="sidebar-label">{editorial ? 'Highlights' : 'Features'}</span>
           <ul class="feature-list">
             {features.map(f => <li>{f}</li>)}
           </ul>
@@ -77,3 +123,129 @@ const parentVault = allVaults.find(v => v.id.replace(/\.(md|mdx)$/, '') === vaul
     </aside>
   </div>
 </PageLayout>
+
+<style>
+  /* ---- variante editorial (graphic design) ---- */
+  .project-head.editorial {
+    padding: clamp(2rem, 6vw, 4.5rem) 0 clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .editorial .project-head-title {
+    font-size: clamp(3rem, 11vw, 9rem);
+    font-weight: 900;
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    margin: 1.5rem 0 0;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+  .editorial .project-head-desc {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    line-height: 1.35;
+    max-width: 36ch;
+    margin: 1.75rem 0 0;
+  }
+  .credits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8rem, max-content));
+    column-gap: 3rem;
+    row-gap: 1rem;
+    margin: 2.5rem 0 0;
+    padding: 1rem 0;
+    border-top: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, currentColor 22%, transparent);
+  }
+  .credits dt {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 0.35rem;
+  }
+  .credits dd { margin: 0; font-size: 0.95rem; }
+
+  /* ---- imagem por baixo (faixa) ---- */
+  .banner { margin: 0 0 2.5rem; }
+  .banner :global(img),
+  .head-media :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--ratio);
+    object-fit: var(--fit);
+    object-position: var(--pos);
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    margin: 0;
+  }
+
+  /* ---- sem imagem ao lado: cabeçalho simples, alinhado à esquerda ----
+     (neutraliza qualquer grelha/flex que o CSS global ponha no .project-head) */
+  .layout-below,
+  .layout-none,
+  .layout-background {
+    display: block;
+  }
+  .layout-below .head-text,
+  .layout-none .head-text,
+  .layout-background .head-text {
+    width: 100%;
+    margin: 0;
+    text-align: left;
+  }
+
+  /* ---- imagem à direita / à esquerda do título ---- */
+  .layout-right,
+  .layout-left {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: center;
+  }
+  /* posições explícitas (em vez de "order"): left = imagem | texto, right = texto | imagem */
+  .layout-left .head-text,  .layout-right .head-text  { grid-area: text;  min-width: 0; }
+  .layout-left .head-media, .layout-right .head-media { grid-area: media; min-width: 0; }
+  .layout-right {
+    grid-template-columns: minmax(0, 1fr) var(--media-w);
+    grid-template-areas: "text media";
+  }
+  .layout-left {
+    grid-template-columns: var(--media-w) minmax(0, 1fr);
+    grid-template-areas: "media text";
+  }
+  .layout-right .project-head-title,
+  .layout-left .project-head-title {
+    font-size: clamp(2.75rem, 7vw, 6.5rem);
+  }
+
+  /* ---- imagem como fundo do cabeçalho ---- */
+  .layout-background {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: clamp(3rem, 10vw, 8rem) clamp(1.25rem, 4vw, 3rem);
+    color: #fff;
+  }
+  .layout-background a { color: inherit; }
+  .layout-background .bg { position: absolute; inset: 0; z-index: -1; }
+  .layout-background .bg :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: var(--fit);
+    object-position: var(--pos);
+  }
+  .layout-background .bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.78), rgb(0 0 0 / 0.3));
+  }
+
+  @media (max-width: 800px) {
+    .layout-right, .layout-left {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "text" "media";
+    }
+    .head-media :global(img) { aspect-ratio: 4 / 3; }
+    .banner :global(img) { aspect-ratio: 4 / 3; }
+  }
+</style>
