@@ -12,11 +12,8 @@ const filtered = headings.filter(h => h.depth === 2 || h.depth === 3);
 ---
 
 {filtered.length > 0 && (
-  <nav class="toc-nav" aria-label="Contents">
-    <div class="toc-head">
-      <span class="toc-label">Contents</span>
-      <span class="toc-count">{filtered.length}</span>
-    </div>
+  <nav class="toc-nav">
+    <span class="toc-label">Contents</span>
     <ul class="toc-list">
       {filtered.map(h => (
         <li class="toc-item">
@@ -25,8 +22,7 @@ const filtered = headings.filter(h => h.depth === 2 || h.depth === 3);
             class={`toc-link${h.depth === 3 ? ' h3' : ''}`}
             data-toc={h.slug}
           >
-            <span class="toc-mark" aria-hidden="true"></span>
-            <span class="toc-text">{h.text}</span>
+            {h.text}
           </a>
         </li>
       ))}
@@ -39,28 +35,15 @@ const filtered = headings.filter(h => h.depth === 2 || h.depth === 3);
     const nav = document.querySelector('.toc-nav');
     if (!nav) return;
 
-    const list = nav.querySelector<HTMLElement>('.toc-list');
     const links = Array.from(nav.querySelectorAll<HTMLAnchorElement>('[data-toc]'));
     if (!links.length) return;
 
     const headingIds = links.map(l => l.dataset.toc!);
 
     function setActive(id: string) {
-      let active: HTMLAnchorElement | undefined;
       links.forEach(l => {
-        const on = l.dataset.toc === id;
-        l.classList.toggle('active', on);
-        if (on) active = l;
+        l.classList.toggle('active', l.dataset.toc === id);
       });
-
-      // Mantém a linha ativa visível dentro da tabela (sem mexer na página)
-      if (list && active) {
-        const top = active.offsetTop;
-        const bottom = top + active.offsetHeight;
-        if (top < list.scrollTop || bottom > list.scrollTop + list.clientHeight) {
-          list.scrollTo({ top: top - list.clientHeight / 2, behavior: 'smooth' });
-        }
-      }
     }
 
     // Set first as default

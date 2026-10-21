@@ -13,6 +13,7 @@ const blog = defineCollection({
       heroImage: image().optional(),
       pinned: z.boolean().default(false),
       tags: z.array(z.string()).default([]),
+      draft: z.boolean().default(false),
     }),
 });
 
@@ -57,6 +58,7 @@ const projects = defineCollection({
       githubUrl: z.string().url().optional(),
       websiteUrl: z.string().url().optional(),
       pdf: z.string().optional(),
+      draft: z.boolean().default(false),
     }),
 });
 

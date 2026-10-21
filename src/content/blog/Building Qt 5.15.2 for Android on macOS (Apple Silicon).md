@@ -1,18 +1,14 @@
 ---
-title: "Building Qt 5.15.2 for Android on Apple Silicon macOS"
-description: "Learn how to cross-compile Qt 5.15.2 for Android on Apple Silicon Macs running macOS 26. Fix NDK r21 ranlib compatibility issues and build ARM64, ARMv7, and x86_64 targets."
+title: Building Qt 5.15.2 for Android on Apple Silicon macOS
+description: Learn how to cross-compile Qt 5.15.2 for Android on Apple Silicon Macs running macOS 26. Fix NDK r21 ranlib compatibility issues and build ARM64, ARMv7, and x86_64 targets.
 pubDate: 2025-10-10
 heroImage: ../../assets/blog-placeholder-3.jpg
 pinned: true
 tags:
   - Qt
-  - Qt 5
   - Android
   - macOS
-  - Apple Silicon
   - Cross-Compilation
-  - Android NDK
-  - Build Systems
 layout: ../../layouts/post/PostWide.astro
 ---
 
