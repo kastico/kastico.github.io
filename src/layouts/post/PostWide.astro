@@ -1,43 +1,85 @@
 ---
 import { Image } from 'astro:assets';
-import PageLayout from '../PageLayout.astro';
+import PageLayout from './PageLayout.astro';
 import Tag from '@components/tag.astro';
 import TableOfContents from '@components/TableOfContents.astro';
+import type { CollectionEntry } from 'astro:content';
 
-interface Props { title: string; description?: string; pubDate: Date; updatedDate?: Date; heroImage?: any; tags?: string[]; headings?: any[]; }
-const { title, description, pubDate, updatedDate, heroImage, tags = [], headings = [] } = Astro.props;
+type Props = CollectionEntry<'blog'>['data'] & { headings?: any[] };
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  tags = [],
+  pinned = false,
+  headings = [],
+} = Astro.props;
+
+// Palavras e tempo de leitura, calculados a partir do conteúdo renderizado
+let words = 0;
+try {
+  const html = await Astro.slots.render('default');
+  const text = html.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ');
+  words = text.split(/\s+/).filter(Boolean).length;
+} catch {
+  words = 0;
+}
+const minutes = Math.max(1, Math.round(words / 200));
+const sections = headings.filter((h) => h.depth >= 2 && h.depth <= 3).length;
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+
+const stats = [
+  { label: 'Published', value: fmt(pubDate), iso: pubDate.toISOString() },
+  updatedDate && { label: 'Updated', value: fmt(updatedDate), iso: updatedDate.toISOString() },
+  words > 0 && { label: 'Reading time', value: `${minutes} min` },
+  words > 0 && { label: 'Words', value: words.toLocaleString('en-GB') },
+  sections > 0 && { label: 'Sections', value: String(sections) },
+].filter(Boolean) as { label: string; value: string; iso?: string }[];
 ---
 
 <PageLayout title={title} description={description}>
-  <div class="post-wide-head">
-    <a href="/blog" class="back-link">← Blog</a>
-    <h1 class="post-wide-title">{title}</h1>
-    {description && <p class="post-wide-desc">{description}</p>}
-  </div>
-
-  {heroImage && <Image src={heroImage} alt={title} class="post-hero-img" width={1200} height={500} />}
-
-  <div class="post-toc-wrap">
-    <aside class="toc-sidebar">
-      <TableOfContents headings={headings} />
-    </aside>
-    <div class="prose">
-      <slot />
-    </div>
-    <aside class="toc-sidebar">
-      <div class="sidebar-block">
-        <span class="sidebar-label">Published</span>
-        <ul class="meta-list">
-          <li><span>Date</span><span class="meta-val">{pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</span></li>
-          {updatedDate && <li><span>Updated</span><span class="meta-val">{updatedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span></li>}
-        </ul>
-      </div>
-      {tags.length > 0 && (
-        <div class="sidebar-block">
-          <span class="sidebar-label">Tags</span>
-          <div class="tag-cloud">{tags.map(t => <Tag tag={t} size="sm" />)}</div>
+  <div class="post-shell">
+    <article class="post-main">
+      <div class="post-head">
+        <div class="post-head-top">
+          <a href="/blog" class="back-link">← Blog</a>
+          {pinned && <span class="post-badge">Pinned</span>}
         </div>
+
+        <h1 class="post-title">{title}</h1>
+        {description && <p class="post-lede">{description}</p>}
+
+        <dl class="post-stats">
+          {stats.map((s) => (
+            <div class="post-stat">
+              <dt>{s.label}</dt>
+              <dd>{s.iso ? <time datetime={s.iso}>{s.value}</time> : s.value}</dd>
+            </div>
+          ))}
+        </dl>
+
+        {tags.length > 0 && (
+          <div class="post-tags">
+            {tags.map((t) => <Tag tag={t} size="sm" />)}
+          </div>
+        )}
+      </div>
+
+      {heroImage && (
+        <Image src={heroImage} alt={title} class="post-cover" width={1400} height={700} />
       )}
+
+      <div class="prose">
+        <slot />
+      </div>
+    </article>
+
+    <aside class="post-toc">
+      <TableOfContents headings={headings} />
     </aside>
   </div>
 </PageLayout>

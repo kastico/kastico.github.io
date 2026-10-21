@@ -1,9 +1,8 @@
 ---
-title: Opening the vault
+title: Home-Lab (1)
 description: The first post.
 pubDate: 2025-10-10
 heroImage: ../../assets/blog-placeholder-3.jpg
-pinned: true
 tags: [misc, introduction, personal]
 layout: ../../layouts/post/PostCentered.astro
 ---

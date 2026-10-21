@@ -5,40 +5,73 @@ import Tag from '@components/tag.astro';
 import TableOfContents from '@components/TableOfContents.astro';
 import type { CollectionEntry } from 'astro:content';
 
-type Props = CollectionEntry<'blog'>['data'] & { headings?: any[] };
-const { title, description, pubDate, updatedDate, heroImage, tags = [], headings = [] } = Astro.props;
+type Props = CollectionEntry<'blog'>['data'] & { headings?: any[]; author?: string };
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  heroImage,
+  tags = [],
+  pinned = false,
+  author = 'Kastico',
+  headings = [],
+} = Astro.props;
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
 ---
 
 <PageLayout title={title} description={description}>
-  <div class="post-wide-head">
-    <a href="/blog" class="back-link">← Blog</a>
-    <h1 class="post-wide-title">{title}</h1>
-    {description && <p class="post-wide-desc">{description}</p>}
+  <div class="post-head">
+    <div class="post-head-top">
+      <a href="/blog" class="back-link">← Blog</a>
+      {pinned && <span class="post-badge">Pinned</span>}
+    </div>
+
+    <h1 class="post-title">{title}</h1>
+    {description && <p class="post-lede">{description}</p>}
+
+    <div class="post-byline">
+      <span>By <strong>{author}</strong></span>
+      <span class="sep">·</span>
+      <time datetime={pubDate.toISOString()}>{fmt(pubDate)}</time>
+      {updatedDate && (
+        <>
+          <span class="sep">·</span>
+          <span>Updated <time datetime={updatedDate.toISOString()}>{fmt(updatedDate)}</time></span>
+        </>
+      )}
+    </div>
+
+    {tags.length > 0 && (
+      <div class="post-tags post-tags--inline">
+        {tags.map((t) => <Tag tag={t} size="sm" />)}
+      </div>
+    )}
   </div>
 
-  {heroImage && <Image src={heroImage} alt={title} class="post-hero-img" width={1200} height={500} />}
+  {heroImage && (
+    <Image src={heroImage} alt={title} class="post-cover" width={1600} height={640} />
+  )}
 
-  <div class="post-toc-wrap">
-    <aside class="toc-sidebar">
-      <TableOfContents headings={headings} />
-    </aside>
+  <div class="post-layout">
     <div class="prose">
       <slot />
     </div>
-    <aside class="toc-sidebar">
-      <div class="sidebar-block">
-        <span class="sidebar-label">Published</span>
-        <ul class="meta-list">
-          <li><span>Date</span><span class="meta-val">{pubDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}</span></li>
-          {updatedDate && <li><span>Updated</span><span class="meta-val">{updatedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span></li>}
-        </ul>
-      </div>
+
+    <aside class="post-side">
       {tags.length > 0 && (
-        <div class="sidebar-block">
+        <div class="post-side-tags">
           <span class="sidebar-label">Tags</span>
-          <div class="tag-cloud">{tags.map(t => <Tag tag={t} size="sm" />)}</div>
+          <div class="tag-cloud">
+            {tags.map((t) => <Tag tag={t} size="sm" />)}
+          </div>
         </div>
       )}
+      <div class="post-toc">
+        <TableOfContents headings={headings} />
+      </div>
     </aside>
   </div>
 </PageLayout>
