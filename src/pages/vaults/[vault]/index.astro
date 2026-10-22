@@ -2,10 +2,10 @@
 import { Image } from 'astro:assets';
 import PageLayout from '../../../layouts/PageLayout.astro';
 import Tag from '@components/tag.astro';
-import { getCollection } from 'astro:content';
+import { getPublished } from '../../../utils/published';
 
 export async function getStaticPaths() {
-  const vaults = await getCollection('vaults');
+  const vaults = await getPublished('vaults');
   return vaults.map((vault) => ({
     params: { vault: vault.id.replace(/\.(md|mdx)$/, '') },
     props: { vault },
@@ -16,7 +16,7 @@ const { vault } = Astro.props;
 const { title, description, pubDate, updatedDate, heroImage } = vault.data;
 const vaultSlug = vault.id.replace(/\.(md|mdx)$/, '');
 
-const allProjects = await getCollection('projects');
+const allProjects = await getPublished('projects');
 const projects = allProjects.filter(p => p.data.vault === vaultSlug);
 const getSlug = (p) => p.id.replace(/\.(md|mdx)$/, '');
 ---

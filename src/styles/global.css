@@ -1,3 +1,4 @@
+
 :root {
   --accent: #7c5cbf;
   --accent-light: #a688e8;
@@ -698,4 +699,143 @@ h1,
   .prose h3 {
     font-size: 1.2em;
   }
+}
+
+/* ── Tabelas ─────────────────────────────────── */
+
+.prose table {
+  display: table !important;
+  width: 100% !important;
+  margin: 2rem 0;
+  border-collapse: collapse !important;
+  border: 1px solid #3a404c;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.prose table th,
+.prose table td {
+  padding: 0.8rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  border: 1px solid #3a404c;
+  overflow-wrap: anywhere;
+}
+
+.prose table thead th {
+  font-weight: 600;
+  color: var(--read-strong);
+  background: #20242c;
+}
+
+.prose table code {
+  white-space: normal;
+  font-size: 0.88em;
+}
+
+@media (max-width: 700px) {
+  .prose table { display: block !important; overflow-x: auto; }
+  .prose table th,
+  .prose table td { min-width: 7rem; }
+}
+/* ── Post: espaçamento sem imagem ─────────────── */
+
+.post-head--plain {
+  padding-bottom: 2.5rem;
+  margin-bottom: 2.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.post-head--plain .post-tags--inline {
+  margin-top: 1.5rem;
+}
+
+/* ── Barra de progresso ───────────────────────── */
+
+.read-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 100;
+  background: transparent;
+  pointer-events: none;
+}
+
+.read-progress span {
+  display: block;
+  height: 100%;
+  background: var(--accent-light);
+  transform: scaleX(0);
+  transform-origin: left;
+  will-change: transform;
+}
+
+/* ── Leitura ──────────────────────────────────── */
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+.post-lede {
+  font-size: 1.2rem;
+  line-height: 1.55;
+}
+
+.post-byline {
+  font-size: 0.88rem;
+}
+
+.prose {
+  line-height: 1.75;
+}
+
+.prose p,
+.prose li {
+  hyphens: manual;
+}
+
+.prose blockquote {
+  margin: 2rem 0;
+  padding: 0.9rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid var(--accent-light);
+  border-radius: 0 6px 6px 0;
+  color: var(--read-text);
+}
+
+.prose :not(pre) > code {
+  padding: 0.15em 0.4em;
+  font-size: 0.85em;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--read-strong);
+  border-radius: 4px;
+}
+
+.prose pre {
+  margin: 1.75rem 0;
+  padding: 1.1rem 1.25rem;
+  background: #0b0d10;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.prose h2 {
+  margin-top: 2.4em;
+  padding-top: 1.2em;
+  border-top: 1px solid var(--border);
+}
+
+.prose h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.prose hr + h2 {
+  border-top: 0;
+  padding-top: 0;
 }

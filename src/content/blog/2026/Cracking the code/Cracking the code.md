@@ -1,14 +1,12 @@
 ---
 title: Cracking the code
 description: The first post.
-pubDate: 2025-10-10
-heroImage: ../../assets/blog-placeholder-3.jpg
+pubDate: 2026-10-20
 pinned: true
 tags:
   - misc
   - introduction
   - personal
-layout: ../../layouts/post/PostWide.astro
 ---
 
 
@@ -32,8 +30,6 @@ My goal is to publish at least **twice a week**:
 - **The learning log** — something new I discovered that week, with examples, useful links, and code when relevant.
 
 No big promises. Just learning, sharing, and getting better along the way.
-
-> **Let's crack the code!**
 
 ---
 

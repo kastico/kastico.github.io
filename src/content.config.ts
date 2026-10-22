@@ -29,6 +29,7 @@ const vaults = defineCollection({
       heroImage: image().optional(),
       pinned: z.boolean().default(false),
       tags: z.array(z.string()).default([]),
+      draft: z.boolean().default(false),
     }),
 });
 

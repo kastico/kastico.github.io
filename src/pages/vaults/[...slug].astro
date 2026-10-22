@@ -1,9 +1,9 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import VaultLayout from '../../layouts/VaultLayout.astro';
+import { type CollectionEntry, render } from 'astro:content';
+import { getPublished } from '../../utils/published';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('vaults');
+	const posts = await getPublished('vaults');
 	return posts.map((post) => ({
 		params: { slug: post.id },
 		props: post,

@@ -2,13 +2,11 @@
 title: Qt 5.15.2 From Source (MACOS)
 description: Here in this tutorial i will show you how to install qt 5.15.2 from source
 pubDate: 2025-10-10
-heroImage: ../../assets/blog-placeholder-3.jpg
-pinned: true
+pinned: false
 tags:
   - misc
   - introduction
   - personal
-layout: ../../layouts/post/PostWide.astro
 ---
 
 With the new Qt6 development Qt 5 have dissapered from the Qt Maintenecen tool so, if somebody still need to use the old Qt5 need to install from from source. Once i have tp gro trown this i tought i would make a little note how to do it for me andk for my or anyone that need to do it.

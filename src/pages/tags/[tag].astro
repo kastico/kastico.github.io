@@ -2,10 +2,10 @@
 import { Image } from 'astro:assets';
 import PageLayout from '../../layouts/PageLayout.astro';
 import Tag from '@components/tag.astro';
-import { getCollection } from 'astro:content';
+import { getPublished } from '../../utils/published';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getPublished('blog');
   const tags = [...new Set(posts.flatMap(p => p.data.tags || []))];
   return tags.map(tag => ({
     params: { tag: tag.toLowerCase() },
@@ -15,7 +15,8 @@ export async function getStaticPaths() {
 
 const { tag, posts } = Astro.props;
 const sorted = [...posts].sort((a, b) => b.data.pubDate - a.data.pubDate);
-const getSlug = (p) => p.id.replace(/\.(md|mdx)$/, '');
+import { getPostSlug } from '../../utils/slug';
+const getSlug = (p) => getPostSlug(p.id);
 ---
 
 <PageLayout title={`#${tag}`} description={`${sorted.length} post${sorted.length !== 1 ? 's' : ''} tagged with ${tag}`}>

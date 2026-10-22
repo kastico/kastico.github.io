@@ -2,12 +2,12 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import { Image } from 'astro:assets';
 import Tag from '@components/tag.astro';
-import { getCollection } from 'astro:content';
+import { getPublished } from '../utils/published';
 import { SITE_DESCRIPTION } from '../consts';
 import '@fontsource/orbitron/900.css';
 import '@fontsource/zen-dots/400.css';
 
-const allPosts = await getCollection('blog');
+const allPosts = await getPublished('blog');
 const sorted = [...allPosts].sort((a, b) => b.data.pubDate - a.data.pubDate);
 const pinnedPost = allPosts.find(p => p.data.pinned);
 
@@ -15,10 +15,10 @@ const tagCounts: Record<string, number> = {};
 allPosts.forEach(p => (p.data.tags || []).forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
 const popularTags = Object.entries(tagCounts).sort(([,a],[,b]) => b - a).map(([t]) => t);
 
-const allVaults = await getCollection('vaults');
-const allProjects = await getCollection('projects');
-
-const getSlug = (p) => p.id.replace(/\.(md|mdx)$/, '');
+const allVaults = await getPublished('vaults');
+const allProjects = await getPublished('projects');
+import { getPostSlug } from '../utils/slug';
+const getSlug = (p) => getPostSlug(p.id);
 const rest = sorted.filter(p => p !== pinnedPost).slice(0, 6);
 ---
 

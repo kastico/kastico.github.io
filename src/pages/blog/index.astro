@@ -1,17 +1,172 @@
 ---
-// To switch layout, change the import below:
-//   import BlogList from '@layouts/blog/BlogList.astro';    ← current
-//   import BlogGrid from '@layouts/blog/BlogGrid.astro';
-//   import BlogMagazine from '@layouts/blog/BlogMagazine.astro';
-
+import PageLayout from '../../layouts/PageLayout.astro';
 import BlogList from '../../layouts/blog/BlogList.astro';
-import { getCollection } from 'astro:content';
+import BlogGrid from '../../layouts/blog/BlogGrid.astro';
+import BlogMagazine from '../../layouts/blog/BlogMagazine.astro';
+import { getPublished } from '../../utils/published';
 
-const posts = await getCollection('blog');
+const posts = await getPublished('blog');
+const title = 'Blog';
+const description = 'Writing about code, design, and whatever else is on my mind.';
+
+const tagCounts: Record<string, number> = {};
+posts.forEach(p => (p.data.tags || []).forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
+const allTags = Object.entries(tagCounts).sort(([, a], [, b]) => b - a).map(([tag, count]) => ({ tag, count }));
+const visibleTags = allTags.slice(0, 12);
+const hiddenTags = allTags.slice(12);
 ---
 
-<BlogList
-  posts={posts}
-  title="Blog"
-  description="Writing about code, design, and whatever else is on my mind."
-/>
+<PageLayout title={title} description={description}>
+  <script is:inline>
+    try {
+      const v = localStorage.getItem('blog-view');
+      document.documentElement.dataset.blogView = ['list', 'grid', 'magazine'].includes(v) ? v : 'list';
+    } catch (e) { document.documentElement.dataset.blogView = 'list'; }
+  </script>
+
+  <div class="blog-head">
+    <h1 class="page-title">{title}</h1>
+    <p class="page-desc">{description}</p>
+  </div>
+
+  <div class="blog-layout">
+    <aside class="blog-sidebar" id="blogSidebar">
+      <span class="blog-sidebar-label">Filter by tag</span>
+      <ul class="filter-list">
+        <li class="filter-list-item">
+          <button class="filter-list-btn active" data-tag="all">
+            <span>All posts</span><span class="filter-count">{posts.length}</span>
+          </button>
+        </li>
+        {visibleTags.map(({ tag, count }) => (
+          <li class="filter-list-item">
+            <button class="filter-list-btn" data-tag={tag}>
+              <span>{tag}</span><span class="filter-count">{count}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+      {hiddenTags.length > 0 && (
+        <>
+          <div class="filter-overflow" id="filterOverflow">
+            <ul class="filter-list">
+              {hiddenTags.map(({ tag, count }) => (
+                <li class="filter-list-item">
+                  <button class="filter-list-btn" data-tag={tag}>
+                    <span>{tag}</span><span class="filter-count">{count}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <button class="filter-overflow-toggle" id="filterToggle" data-count={hiddenTags.length}>
+            +{hiddenTags.length} more
+          </button>
+        </>
+      )}
+    </aside>
+
+    <div class="blog-content">
+      <div class="blog-tools">
+        <input id="blog-search" type="search" placeholder="Search...." aria-label="Pesquisar posts" />
+        <div class="view-switch" role="group" aria-label="Vista">
+          <button type="button" data-view-btn="list">List</button>
+          <button type="button" data-view-btn="grid">Grid</button>
+          <button type="button" data-view-btn="magazine">Magazine</button>
+        </div>
+      </div>
+
+      <BlogList posts={posts} />
+      <BlogGrid posts={posts} />
+      <BlogMagazine posts={posts} />
+
+      <p id="blog-empty" style="display:none">Nenhum post encontrado.</p>
+    </div>
+  </div>
+
+  <style is:global>
+    .blog-view { display: none; }
+    html[data-blog-view="list"] .blog-view[data-view="list"],
+    html[data-blog-view="grid"] .blog-view[data-view="grid"],
+    html[data-blog-view="magazine"] .blog-view[data-view="magazine"] { display: block; }
+
+    .blog-tools {
+      display: flex; flex-wrap: wrap; gap: 1rem;
+      align-items: center; justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    #blog-search { flex: 1 1 240px; max-width: 360px; padding: 0.55rem 0.8rem; font-size: 0.9rem; }
+
+    .view-switch { display: flex; border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+    .view-switch button {
+      border: 0; border-radius: 0; padding: 0.5rem 0.9rem;
+      font-size: 0.8rem; background: transparent; color: var(--gray); cursor: pointer;
+    }
+    .view-switch button + button { border-left: 1px solid var(--border); }
+    .view-switch button.active { background: var(--card-bg); color: var(--accent-light); }
+  </style>
+
+  <script>
+    const root = document.documentElement;
+    const sidebar = document.getElementById('blogSidebar')!;
+    const input = document.getElementById('blog-search') as HTMLInputElement;
+    const viewBtns = document.querySelectorAll<HTMLButtonElement>('[data-view-btn]');
+    const empty = document.getElementById('blog-empty')!;
+    let tag = 'all';
+
+    function apply() {
+      const q = input.value.trim().toLowerCase();
+      const view = document.querySelector(`.blog-view[data-view="${root.dataset.blogView}"]`);
+      if (!view) return;
+      let visible = 0;
+
+      view.querySelectorAll<HTMLElement>('[data-tags]').forEach(el => {
+        const tags = el.dataset.tags!.split(',').filter(Boolean);
+        const text = (el.textContent + ' ' + tags.join(' ')).toLowerCase();
+        const ok = (tag === 'all' || tags.includes(tag)) && (!q || text.includes(q));
+        el.style.display = ok ? '' : 'none';
+        if (ok) visible++;
+      });
+
+      // no magazine: esconde o bloco do destaque se não restar nenhum item
+      view.querySelectorAll<HTMLElement>('.magazine-split').forEach(w => {
+        const any = [...w.querySelectorAll<HTMLElement>('[data-tags]')].some(e => e.style.display !== 'none');
+        w.style.display = any ? '' : 'none';
+      });
+
+      empty.style.display = visible ? 'none' : '';
+    }
+
+    function setView(v: string) {
+      root.dataset.blogView = v;
+      try { localStorage.setItem('blog-view', v); } catch (e) {}
+      viewBtns.forEach(b => b.classList.toggle('active', b.dataset.viewBtn === v));
+      apply();
+    }
+
+    viewBtns.forEach(b => b.addEventListener('click', () => setView(b.dataset.viewBtn!)));
+    input.addEventListener('input', apply);
+
+    sidebar.addEventListener('click', e => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.filter-list-btn');
+      if (!btn) return;
+      sidebar.querySelectorAll('.filter-list-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tag = btn.dataset.tag!;
+      apply();
+    });
+
+    const toggle = document.getElementById('filterToggle');
+    const overflow = document.getElementById('filterOverflow');
+    if (toggle && overflow) {
+      overflow.style.display = 'none';
+      toggle.addEventListener('click', () => {
+        const open = overflow.style.display !== 'none';
+        overflow.style.display = open ? 'none' : 'block';
+        toggle.textContent = open ? `+${toggle.dataset.count} more` : 'Show less';
+      });
+    }
+
+    setView(root.dataset.blogView || 'list');
+  </script>
+</PageLayout>

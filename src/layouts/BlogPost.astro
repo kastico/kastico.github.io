@@ -5,7 +5,11 @@ import Tag from '@components/tag.astro';
 import TableOfContents from '@components/TableOfContents.astro';
 import type { CollectionEntry } from 'astro:content';
 
-type Props = CollectionEntry<'blog'>['data'] & { headings?: any[]; author?: string };
+type Props = CollectionEntry<'blog'>['data'] & {
+  headings?: any[];
+  author?: string;
+  readingTime?: number;
+};
 const {
   title,
   description,
@@ -16,6 +20,7 @@ const {
   pinned = false,
   author = 'Kastico',
   headings = [],
+  readingTime,
 } = Astro.props;
 
 const fmt = (d: Date) =>
@@ -23,7 +28,9 @@ const fmt = (d: Date) =>
 ---
 
 <PageLayout title={title} description={description}>
-  <div class="post-head">
+  <div class="read-progress" aria-hidden="true"><span id="readBar"></span></div>
+
+  <div class:list={['post-head', { 'post-head--plain': !heroImage }]}>
     <div class="post-head-top">
       <a href="/blog" class="back-link">← Blog</a>
       {pinned && <span class="post-badge">Pinned</span>}
@@ -36,6 +43,12 @@ const fmt = (d: Date) =>
       <span>By <strong>{author}</strong></span>
       <span class="sep">·</span>
       <time datetime={pubDate.toISOString()}>{fmt(pubDate)}</time>
+      {readingTime && (
+        <>
+          <span class="sep">·</span>
+          <span>{readingTime} min read</span>
+        </>
+      )}
       {updatedDate && (
         <>
           <span class="sep">·</span>
@@ -56,7 +69,7 @@ const fmt = (d: Date) =>
   )}
 
   <div class="post-layout">
-    <div class="prose">
+    <div class="prose" id="postProse">
       <slot />
     </div>
 
@@ -74,4 +87,20 @@ const fmt = (d: Date) =>
       </div>
     </aside>
   </div>
+
+  <script>
+    const bar = document.getElementById('readBar');
+    const prose = document.getElementById('postProse');
+    if (bar && prose) {
+      const update = () => {
+        const rect = prose.getBoundingClientRect();
+        const total = rect.height - window.innerHeight * 0.6;
+        const done = Math.min(Math.max(-rect.top + window.innerHeight * 0.2, 0), total);
+        bar.style.transform = `scaleX(${total > 0 ? done / total : 0})`;
+      };
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      update();
+    }
+  </script>
 </PageLayout>

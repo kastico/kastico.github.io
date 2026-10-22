@@ -3,10 +3,11 @@ import { Image } from 'astro:assets';
 import PageLayout from '../../../../layouts/PageLayout.astro';
 import Tag from '@components/tag.astro';
 import TableOfContents from '@components/TableOfContents.astro';
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
+import { getPublished } from '../../../../utils/published';
 
 export async function getStaticPaths() {
-  const projects = await getCollection('projects');
+  const projects = await getPublished('projects');
   return projects.map(project => ({
     params: { vault: project.data.vault, project: project.id.replace(/\.(md|mdx)$/, '') },
     props: { project }
@@ -28,7 +29,7 @@ const {
 const vaultSlug = project.data.vault;
 const { Content, headings } = await render(project);
 
-const allVaults = await getCollection('vaults');
+const allVaults = await getPublished('vaults');
 const parentVault = allVaults.find(v => v.id.replace(/\.(md|mdx)$/, '') === vaultSlug);
 
 // vaults de design têm um layout mais editorial (sem linguagem de código)
